@@ -1,0 +1,1132 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <!-- EDYTUJ odpowiednio tagi: TITLE,DESCRIPTION,AUTHOR -->
+    <title>Tytuł prezentacji | PGS Software</title>
+    <meta name="description" content="Opis prezentacji">
+    <meta name="author" content="Autor prezentacji">
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+<link href="main.css" rel="stylesheet"></head>
+<!-- usuń klasę jeśli chcesz ciemne style (zenburn) dla 'code snippets' -->
+<!--monokai-sublime light-code -->
+<body class="monokai-sublime">
+<div class="reveal">
+    <div class="slides">
+        <!-- TUTAJ ZACZYNA SIĘ PREZENTACJA - pierwszy slide -->
+
+        <style>
+    .hljs-comment {
+        color: #ff7726 !important;
+    }
+</style>
+
+<!-- Brand PGS Software -->
+<section data-state="squares-off">
+  <!-- class img50 to img400 (width: 50, 100, 150, 200, 250, 300, 350, 400 px ) -->
+  <img src="./images/pgssoftware-logo.svg" alt="brand" class="img300">
+</section>
+
+<!-- Talk title -->
+<section data-state="squares-off theme orange">
+  <p><img src="./images/pgssoftware-logo-white.svg" alt="logo" class="img200"></p>
+  <h2>Akademia Developera – edycja FrontDev</h2>
+  <p>ECMAScript 6 - ciag dalszy, Linter, Flow i Web API</p>
+  <p><img src="./images/avatar.jpeg" class="border" alt="Picture" style="max-height: 60px;"></p>
+  <ul class="list-horizontal">
+    <li>Szymon Sitko</li>
+    <li>Software Developer</li>
+  </ul>
+</section>
+
+<section>
+    <img src="./images/praktyki.jpg" />
+</section>
+
+<section>
+    <h2>O czym będziemy mówić?</h2>
+    <ul>
+        <li class="fragment">Kontynuacja ES6</li>
+        <li class="fragment">Narzędzia: Lintery i Flow</li>
+        <li class="fragment">Web API</li>
+    </ul>
+</section>
+
+<section>
+
+    <h2>ECMAScript 6th oferuje jeszcze bardziej zaawansowane funkcje!</h2>
+
+    <h4>A zatem:</h4>
+    <hr>
+    <p class="fragment u-boldText">Promises</p>
+    <p class="fragment u-boldText">For ... of</p>
+    <p class="fragment u-boldText">Generatory & Iteratory</p>
+    <p class="fragment u-boldText">Nowe, wbudowane metody</p>
+    <p class="fragment u-boldText">Map & Set</p>
+
+    <aside class="notes"></aside>
+</section>
+
+
+<section>
+
+    <section>
+        <h2>ES6 - Promises</h2>
+
+        <p>Klasa <span class="u-mono"><strong>Promise</strong></span></p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                const makeAPIcall = (requestURL) => {
+                    return new Promise((resolve, reject) => {
+                      const xhr = new XMLHttpRequest();
+                      xhr.open("GET", requestURL);
+                      // Istotne linie poniżej:
+                      xhr.onload = () => resolve(xhr.responseText);
+                      xhr.onerror = () => reject(xhr.statusText);
+                      xhr.send();
+                    });
+                  }
+            </code>
+        </pre>
+
+        <aside class="notes">
+
+            Promise obiekt reprezentuje ostateczne zakończenie (lub niepowodzenie) operacji
+            asynchronicznej i jej wynikową wartość. Funkcja przekazywana z argumentami 
+            rozwiązuje resolve i odrzuca reject. Funkcja executora wykonywana jest natychmiast
+            przez implementację Promise, przekazując funkcje rozstrzygania resolve i odrzucania
+            reject (executor jest wywoływany, zanim konstruktor Promise zwróci nawet utworzony obiekt).
+            Funkcje rozstrzygania i odrzucania, gdy są wywoływane, odpowiednio rozwiązują lub odrzucają
+            obietnicę. Executor zwykle inicjuje pracę asynchroniczną, a następnie, po jej zakończeniu,
+            wywołuje funkcję resolve w celu rozwiązania obietnicy lub odrzuca ją, jeśli wystąpił błąd.
+            Jeśli błąd zostanie zgłoszony w funkcji executora, obietnica zostaje odrzucona.
+            Wartość zwracana executora jest ignorowana.
+
+        </aside>
+    </section>
+
+    <section>
+        <p>Uzycie funkcji "makeAPIcall" w praktyce</p>
+
+        <pre>
+            <code data-trim class="javascript hljs">
+                makeAPIcall
+                    .then((result) => {
+                        // Zrob cos z result ...
+                    })
+                    .catch((error) => {
+                        // Zrob cos z errorem ...
+                    })
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+    </section>
+
+    <section>
+        <h2>Dlaczego <span class="u-boldText">Promise?</span></h2>
+        <ul>
+            <li class="fragment">Asynchroniczne programowanie? Zaden problem!</li>
+            <li class="fragment">Unikniecie "piekla" callbackow</li>
+            <li class="fragment">Czytelnosc i utrzymanie kodu</li>
+        </ul>
+
+        <aside class="notes">
+            <!-- Make comments to the promises section below! -->
+        </aside>
+    </section>
+
+
+</section>
+
+<section>
+
+    <h2>For...of</h2>
+
+    <p>Kontrukcja for...of tworzy pętlę iterującą przez Iterable Objects, tj.
+        Array, String, Set, Map itd.
+    </p>
+    <pre>
+        <code data-trim class="javascript hljs">
+            // Przykład
+            let goodFood = ['burger', 'bacon', 'egg']
+
+            for (let eachFood of goodFood) {
+                console.log(eachFood)
+            }
+        </code>
+    </pre>
+
+    <aside class="notes">
+
+        Konstrukcja for...of  tworzy pętlę iterującą przez iterable objects
+        (łącznie z Array, Map, Set, String, TypedArray, arguments itd.),
+        wywołuje funkcję z zadaniami które mają być wykonane dla wartości każdej z właściwości.
+
+    </aside>
+
+</section>
+<section>
+
+    <section>
+        <h2>Funkcja generator</h2>
+
+        <p>Pozwala na "odlozenie na pozniej" wartosci wynikajacych z polecen funkcji,
+            oraz dostep do nich na zadanie, tj. dopiero gdy wartosc jest niezbedna.
+        </p>
+
+
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Przyklad generatora dzialajacego na tablicy
+                function* addValueToEach(array, value) {
+                    for (let i = 0; i < array.length; i++) {
+                        yield array[i] * value
+                    }
+                }
+            </code>
+        </pre>
+
+        <aside class="notes">
+
+            Deklaracja function* (Słowo kluczowe function przed gwiazdką) definiuje funkcję generatora,
+            która zwraca obiekt Generator. Generatory są specyficznym rodzajem funkcji, która może być
+            zatrzymywana i wznawiana. Pomiędzy kolejnymi wznowieniami zachowany jest kontekst (variable bindings).
+            Wywołanie funkcji generatora nie wykonuje poleceń w niej zawartych od razu; Zamiast tego, zwracany jest
+            obiekt iteratora. Dopiero kiedy na iteratorze wywoływana jest metoda next() wykonywane jest ciało funkcji,
+            do momentu wystąpienia pierwszego wyrażenia yield. yield Określa jaka wartość zostanie zwrócona z generatora
+            lub, jeśli użyto yield*, wskazuje na kolejny do wywołania generator. Metoda next() zwraca obiekt z
+            właściwością value zawierającą zwróconą przez yield wartość oraz właściowść done , która wskazuje czy
+            generator zwórcił już wartość ostatniego yield. Wywołanie metody next() z argumentem, będzie wznawiało
+            wykonywanie generatora za miejscem gdzie występował yield wstrzymujący generator.
+
+        </aside>
+    </section>
+
+    <section>
+        <p>Do ekstrakcji kazdej nastepnej wartosci uzywa sie metody .next(), kiedy
+            zbior jest wyczerpany wowczas wartosc zawsze rowna sie 'undefined', a flaga
+            done ustawiona jest na true
+        </p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Jak uzyc?
+                let eachTransformed = addValueToEach([1,3,5], 20)
+
+                eachTransformed.next() // {value: 20, done: false}
+                eachTransformed.next() // {value: 60, done: false}
+                eachTransformed.next() // {value: 100, done: false}
+                eachTransformed.next() // {value: undefined, done: true}
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+    </section>
+
+    <section>
+        <h2>Iterator</h2>
+            <p>Umozliwia uzycie metody .next() bez potrzeby definiowania funkcji generatora,
+                przy zachowaniu mozliwosci zwrocenia wartosci na zadanie<p>
+    
+            <pre>
+                <code data-trim class="javascript hljs">
+                    // Przypisanie funkcji iteratora dla tablicy
+                    let names = ['Simon', 'Jake', 'John']
+
+                    let iterableNames = names[Symbol.iterator]()
+
+                    // Metoda wciaz ta sama!
+                    iterableNames.next()
+                    // Rezultat: { value: 'Simon', done: false}
+                </code>
+            </pre>
+    
+            <aside class="notes">
+            </aside>
+    </section>
+
+    <section>
+        <h2>Po co to wszystko? ...</h2>
+        <p class="fragment">Bardziej <strong>wydajny</strong> kod</p>
+        <p class="fragment">Lepsza <strong>kontrola</strong> nad przeplywem danych</p>
+
+        <aside class="notes">
+            <!-- Add some notes below! -->
+        </aside>
+    </section>
+
+</section>
+<section>
+    <section>
+        <h2>ES6 - Nowe Starego Metody</h2>
+
+        <p><strong>Array: .find() i .findIndex()</strong>to nowe funkcje do znajdowania elementu i indeksu w tablicy</p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                [ 1, 3, 4, 2 ].find(x => x > 3) // 4
+                [ 1, 3, 4, 2 ].findIndex(x => x > 3) // 2
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+
+    
+    </section>
+
+    <section>
+        <p><strong>Object.assign</strong> kopiuje wszystkie własne właściwości z jednego albo więcej obiektów
+            źródłowych do obiektu docelowego. Finalnym produktem jest obiekt docelowy.
+        </p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                let obj1 = { value: 21 }
+                let obj2 = { name: 'Simon' }
+
+                // Rezultat Object.assign
+                let result = Object.assign(obj1, obj2)
+                // { value: 21, name: 'Simon' }
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+
+    </section>
+
+    <section>
+        <p><strong>String.repeat()</strong> umożliwia powtórzenie wyrażenia przez dowolną ilość razy, podaną jako
+            parametr.
+        </p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Trywialny przykład
+                let myNameRepeated = "my name!".repeat(3)
+                // "my name! my name! my name! "
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+
+    </section>
+
+    <section>
+        <p>Oraz <strong>nowe metody</strong> ułatwiające pracę ze zmiennymi o typie "string"
+        </p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Przykłady użycia
+                "hello".startsWith("ello", 1) // true
+                "hello".endsWith("hell", 4)   // true
+                "hello".includes("ell")       // true
+                "hello".includes("ell", 1)    // true
+                "hello".includes("ell", 2)    // false
+
+                // Nigdy więcej brzydkiego indexOf!
+                "hello".indexOf("ello") === 1; // true
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+
+    </section>
+
+    <section>
+        <p>A także nowa metoda do bezpiecznego sprawdzania "bezpiecznego" integer'a</p>
+
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Przykład użycia
+                Number.isSafeInteger(42) === true
+                Number.isSafeInteger(9007199254740992) === false
+            </code>
+        </pre>
+
+        <p><strong>TIP:</strong> Jak sprawdzić maksymalną, bezpieczną wartość dla zmiennej o typeof "number"?</p>
+        <p>Używając <strong>console.log(Number.MAX_SAFE_INTEGER)</strong>, który nota bene równa się 9007199254740991</p>
+
+        <aside class="notes">
+        </aside>
+
+    </section>
+
+    <section>
+        <p>Metoda <strong>Math.truncate()</strong> do kompletnego usunięcia "floating point" ze zmiennej o typie "number"</p>
+
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Przykład użycia
+                console.log(Math.trunc(42.7)) // 42
+                console.log(Math.trunc( 0.1)) // 0
+                console.log(Math.trunc(-0.1)) // -0
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+
+    </section>
+
+    <section>
+        <p>Oraz ostatnia metoda <strong>Math.sign()</strong>, która determinuje znak liczby, tj. dodatni, ujemny albo czy jest zerem.</p>
+
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Przykład użycia
+                console.log(Math.sign(7))   // 1
+                console.log(Math.sign(0))   // 0
+                console.log(Math.sign(-0))  // -0
+                console.log(Math.sign(-7))  // -1
+                console.log(Math.sign(NaN)) // NaN
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+
+    </section>
+
+    <section>
+        <p>Nowe funkcje dla sprawdzenia wartości nie-numerycznych oraz liczb skonczonych</p>
+
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Przykłady z Number.isNan() 
+                Number.isNaN(42) === false
+                Number.isNaN(NaN) === true
+                
+                // Przykłady z .isFinite()
+                Number.isFinite(Infinity) === false
+                Number.isFinite(-Infinity) === false
+                Number.isFinite(NaN) === false
+                Number.isFinite(123) === true
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+
+    </section>
+
+    <section>
+        <h2>Uwaga!</h2>
+
+        <p>Globalna funkcja isNan() i Number.isNaN() mają zupełnie inne zastosowanie!</p>
+
+        <p>Kiedy <strong>isNaN()</strong> sprawdza czy wartość jest NaN, <strong>Number.isNaN()</strong> w pierwszej kolejności
+        sprawdza czy podana wartość równa się NaN oraz czy jej typ równy jest "number".</p>
+        
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Przykład z isNan
+                isNaN('my name!') // true
+
+                // Przykład z Number.isNaN()
+                Number.isNaN('my name!') // false
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+
+    </section>
+    
+</section>
+<section>
+    <section>
+        <h2>ES6 - Set</h2>
+
+        <p>Obiekt typu <strong>Set</strong> pozwala na przechowanie unikalnych wartości każdego typu ("any"),
+            w celu uniknięcia powtórzen.
+        </p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                let uniqueValues = new Set()
+
+                // .add() do dodawania nowych elementów
+                uniqueValues.add(1) // Set(1) {1}
+                // Nie powiedzie się!
+                uniqueValues.add(1) // Set(1) {1}
+
+                // Przykłady dla .size & .has()
+                uniqueValues.size === 1 // true
+                uniqueValues.has(1) // true
+                uniqueValues.values() // SetIterator {1}
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+    </section>
+
+    <section>
+        <h2>Set - Ciąg Dalszy</h2>
+
+        <p>Iteracja przez Set możliwa jest w sposób jak poniżej:
+        </p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                // For ... of składnia
+                let someSet = new Set([1, 3, 'value'])
+
+                for (let key of someSet.values())
+                    console.log(key)
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+    </section>
+
+    <section>
+        <h2>ES6 - Map</h2>
+
+        <p>Jest prostym obiektem mapującym klucze do wartości.
+        </p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                let mapExample = new Map([
+                    ['make', 'Ford'],
+                    ['year', 2011],
+                    ['price', '$2341']
+                ])
+                mapExample.get('year') // 2011
+                mapExample.set('mileage', 11298)
+                // Rezultat: {"make" => "Ford",
+                //		"year" => 2011,
+                //		"price" => "$2341",
+                //		"mileage" => 92820983}
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+    </section>
+
+    <section>
+        <h2>Map - Ciąg Dalszy</h2>
+
+        <p>Uzyskanie wartości przechowywanych w instancji obiektu Map, odbywa się za pomocą metod:
+        </p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Zwróć tylko wartości
+                mapExample.values()
+                // {"Ford", 2011, "$2341", 92820983}
+
+                // Tylko klucze
+                mapExample.keys() // {"make", "year", "price", "mileage"}
+
+                // Oraz pary klucz - wartość z for .. of
+                for (let each of mapExample.entries()) {
+                    console.log(each) // ["make", "Ford"] ...
+                }
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+    </section>
+
+    <section>
+        <h2>Map kontra Object</h2>
+
+        <p class="u-boldText">Główne różnice:</p>
+        <hr>
+        <ul>
+            <li>Object wspiera tylko type "string" jako klucz, gdzie Map właściwie każdy typ</li>
+            <li>Object nie należy do iterable, więc nie można zastosować prostej pętli do uzyskania wartości</li>
+            <li>Aby użyć JSON.stringyfy na danych z Map, będzie wymagana dodatkowa funkcja pomocnicza</li>
+            <li>Object posiada wszystkie metody prototypu, gdzie Map tylko te absolutnie niezbędne</li>
+            <li>słaba optymalizacja metody .get() w Map może powodować iż uzyskiwanie wartości będzie mniej wydajne</li>
+            <li>Mapy mogą przechowywać więcej par klucz / wartość: 16.7 mln vs 11.1 mln</li>
+        </ul>
+
+        <aside class="notes">
+        </aside>
+    </section>
+</section>
+
+
+
+
+
+
+<section>
+
+    <h2>JavaScript Tools: Narzędzia do tworzenia lepszego kodu</h2>
+
+    <hr>
+    <p class="fragment"><span class="u-boldText">Linter</span> - co to jest oraz przykłady</p>
+    <p class="fragment"><span class="u-boldText">Flow</span> dla statycznego typowania zmiennych</p>
+
+    <aside class="notes">
+
+        <!-- Add some brief explanation why those things should be talked about -->
+
+    </aside>
+</section>
+
+<section>
+
+    <h2>Linter - Co to jest?</h2>
+
+    <p class="fragment"><strong>Code linting</strong> narzędzie do statycznej analizy jakości kodu.
+    Ponadto, Linter daję możliwość "wychwycenia" potencjalnych błedów w czasie pisania. Dzięki standardom
+    według których Linter formatuje kod, staje się on automatycznie łatwiejszy w utrzymaniu.
+    </p>
+
+    <aside class="notes">
+    </aside>
+
+</section>
+
+
+<section>
+
+    <h2>Jakie są najlepsze Lintery & code formattery znane dla JavaScript'u?</h2>
+    <hr>
+
+    <ul>
+        <li class="fragment">JSHint</li>
+        <li class="fragment">ESLint</li>
+        <li class="fragment">StandardJS</li>
+    </ul>
+
+    <aside class="notes">
+    </aside>
+    
+</section>
+<section>
+    <section>
+        <h2>JSHint</h2>
+        <hr>
+
+        <p>JSHint powstał na bazie innego lintera, JSLint powstałego w 2002 roku. Aby zacząć analizę
+            kodu z uzyciem JSHint, należy stworzyć plik .jshintrc w root katalogu projektu, który
+            zawiera instrukcje na które błędy głównie ma zwracać uwagę. Aby zmaksymalizować doświadczenie,
+            zaleca się instalację plugina do edytora kodu.
+        </p>
+
+        <pre>
+            <code data-trim class="javascript hljs">
+                {
+                    "browser": true,
+                    "esnext": true,
+                    "globals": {},
+                    "globalstrict": true,
+                    "quotmark": true,
+                    "undef": true,
+                    "unused": true
+                }
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+    </section>
+
+    <section>
+
+        <p>Przykładowe komunikaty błędów zwrócone przez JSHint</p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                var iAmNeverUsed = "And I like it!"
+                index.js: line 1, col 5, 'iAmNeverUsed' is defined but never used.
+
+                index.js: line 1, col 9, Missing "use strict" statement.
+
+                var a = eval("x * y") + "<br>";
+                index.js: line 26, col 13, eval can be harmful.
+
+                var x = 10;
+                var x = 20;
+                index.js: line 45, col 9, 'x' is already defined.
+
+                function someFunction() {}
+                index.js: line 51, col 2, Missing semicolon.
+            </code>
+        </pre>
+    </section>
+
+    <section>
+
+        <h2>Zalety:</h2>
+        <ul>
+            <li>Świetne wsparcie wśród developerów JavaScript</li>
+            <li>Posiada domyślną konfigurację, bez potrzeby spędzenia dodtakowego czasu</li>
+            <li>Wspiera podstawowe funkcje składni ES6</li>
+        </ul>
+        <h2>Wady:</h2>
+        <ul>
+            <li>Nie umożliwia dodawanie własnych zasad walidacji</li>
+            <li>Mała oczywistość względem zasad, które to dokładnie nie przeszły walidacji</li>
+            <li>Brak wsparcia dla frameworku ReactJS</li>
+        </ul>
+
+    </section>
+    
+</section>
+    
+<section>
+    <section>
+        <h2>ESLint</h2>
+        <hr>
+
+        <p>Został stworzony jako open source narzędzie w 2013 roku aby sprostać dynamicznym zmianom
+            języka JavaScript i jego następnym odsłonom (ES6+). Konfiguracja odbywa się przez
+            plik .eslintrc.json oraz tak jak w przypadku JS Hint, za pomocą odpowiednich pluginów.
+        </p>
+
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Przykładowe elementy konfiguracji
+                {
+                    env: {
+                        browser: true
+                    },
+                    extends: eslint:recommended,
+                    rules: {
+                        indent: [
+                            error,
+                            4
+                        ],
+                        quotes: [
+                            error,
+                            single
+                        ]
+                    }
+                }
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+    </section>
+
+    <section>
+
+        <p>Błędy wychwycone przez ESLint w edytorze Visual Studio Code:</p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                var someVariable = 100;
+                // Error:
+                [eslint] 'someVariable' is assigned a value but never used.
+                (no-unused-vars)
+
+                var myName = 'Janusz';
+                [eslint] Strings must use doublequote. (quotes)
+            </code>
+        </pre>
+    </section>
+
+    <section>
+
+        <h2>Zalety:</h2>
+        <ul>
+            <li>Doskonała konfigurowalność, pełna kontrola nad zasadami (włącz, wyłącz, edytuj)</li>
+            <li>Można tworzyć własne zasady walidacji kodu</li>
+            <li>Kompletne wsparcie dla wszystkich rynkowych framework'ów</li>
+            <li>Istniejące zasady są czytelnie udokumentowane i zdefiniowane</li>
+            <li>Łatwa integracja z edytorem kodu IDE</li>
+            <li>Posiada wbudowany wybór różnych "style guides"</li>
+        </ul>
+        <h2>Wady:</h2>
+        <ul>
+            <li>Stosunkowo Wolniejszy w pracy (wolniejszy niż JSHint)</li>
+            <li>Wymaga początkowej konfiguracji która wydaje się być skomplikowana i czasochłonna</li>
+        </ul>
+
+    </section>
+    
+</section>
+    
+<section>
+    <section>
+        <h2>StandardJS</h2>
+        <hr>
+
+        <p>Jest nieco innym narzędziem niż linter. Daje możliwość zwykłego raportowania na temat stylu kodu
+            ale również działa jako <strong>code-formatter</strong>. Za pomocą flagi <strong>--fix</strong>, daje możliwość edycji i naprawienia
+            wszystkich wykrytych błędów. Jeśli nie jest w stanie poradzić sobie z wszystkimi błędami, StandardJS
+            wciąż będzie raportował o tych pozostałych.
+        </p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Aby zainstalować StandardJS
+                npm install --save-dev standard
+
+                // Aby uruchomić walidację (z katalogu root)
+                ./node_modules/.bin/standard
+            </code>
+        </pre>
+
+        <aside class="notes">
+        </aside>
+    </section>
+
+    <section>
+
+        <p>Błędy wychwycone przez ESLint w edytorze Visual Studio Code:</p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Po odpaleniu wyżej wymienionej komendy
+                standard: Use JavaScript Standard Style (https://standardjs.com)
+
+                // Podpowiedź względem formatowania kodu
+                standard: Run 'standard --fix' to automatically fix some problems.
+                ./index.js:1:5: 'someVariable' is assigned a value but never used.
+                ./index.js:3:1: Expected space(s) after "if".
+                ./index.js:3:4: Unexpected constant condition.
+            </code>
+        </pre>
+    </section>
+
+    <section>
+
+        <h2>Zalety:</h2>
+        <ul>
+            <li>Bardzo czytelne zasady według których kod jest formatowany i walidowany</li>
+            <li>Instalacja nie wymaga dodatkowej konfiguracji i dodatkowych plików konfiguracyjnych</li>
+            <li>Jest naturalnie stworzony do wsparcia składni ES6+</li>
+            <li>Preferowany style guide przez StandardJS jest czystym, powszechnie akceptowanym przez środowisko programistów JavaScript</li>
+        </ul>
+        <h2>Wady:</h2>
+        <ul style="position:absolute;left:0">
+            <li>Znikoma dostępność pluginów do walidacji w czasie rzeczywistym</li>
+        </ul>
+
+    </section>
+    
+</section>
+        
+
+<section>
+    <section>
+        <h2>Czym jest <strong>Flow?</strong></h2>
+
+        <p><strong>Flow</strong> jest to statyczny "type checker" języka JavaScript</p>
+
+        <h4>Dlaczego?</h4>
+
+        <p>JavaScript jest dynamicznie typowanym językiem, a więc z zasady silnik języka nie
+            forsuje definicji typów zmiennych. <br><br><strong class="fragment">Co to oznacza?</strong>
+        </p>
+    </section>
+
+    <section>
+        <p>Jeżeli rozważymy taki przypadek jak poniżej:</p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Jeśli funkcja z definicji oczekuje typ zmiennej "string"
+                function splitName(fullNameString) {
+                    return fullNameString.split(' ')
+                }
+
+                // A podamy jej type "number"
+                splitName(102)
+
+                // Zostaniemy obdarzeni błędem o treści:
+                Uncaught TypeError: fullNameString.split is not a function
+            </code>
+        </pre>
+    </section>
+
+    <section>
+        <h2>Zmienmy to!</h2>
+
+        <p>Flow daje możliwość zdefiniowania typu parametru funkcji!</p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                /*@flow*/
+
+                function splitName(fullNameString: string) : Array {
+                    return fullNameString.split(' ')
+                }
+
+                splitName('Arthur Alexander') // Rezultat: ['Arthur', 'Alexander']
+
+                // Jeśli natomiast podamy niewłaściwy typ parametru
+                splitName(2)
+            </code>
+        </pre>
+    </section>
+
+    <section>
+        <p>Flow powiadomi o tym tak szybko jak to możliwe.</p>
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Błąd widoczny w edytorze
+                [flow] Cannot call 'splitName' with '2' bound to 'fullNameString'
+                because number [1] is incompatible with string [2].
+            </code>
+        </pre>
+    </section>
+
+    <section>
+        <h2>Czy warto?</h2>
+        <hr>
+
+        <p>Flow jest świetną alternatywą dla języka <strong>TypeScript</strong>, który z założenia
+            operuje na silnie typowanych zmiennych. Nie jest on integralną częscią języka a jego
+            rozszerzeniem, które wymaga dodatkowej konfiguracji projektu i edytora kodu.
+        </p>
+
+        <h4>Korzyści z używania Flow</h4>
+        <ul>
+            <li class="fragment"><strong>Pełna kontrola</strong> nad przepływem danych, szczególnie istotna w większych projektach</li>
+            <li class="fragment">Flow pozwala <strong>szerzej spojrzeć na kod</strong>, pozwalając z łatwością identyfikować
+                potencjalnie niebezpieczne częsci kodu
+            </li>
+            <li class="fragment">Tak jak w przypadku linterów, feedback jest przekazywany <strong>w czasie rzeczywistym</strong>,
+                a nie w momencie kompilacji, co wydłużałoby czas pracy nad projektem
+            </li>
+            <li class="fragment">Flow "naprawia" niedoskonałości języka JavaScript, tzw. <strong>"duck typing"</strong></li>
+                
+        </ul>
+    </section>
+
+</section>
+
+<section>
+
+    <h2>Web API o których wspomnimy:</h2>
+
+    <hr>
+    <p class="fragment"><strong>History</strong></p>
+    <p class="fragment"><strong>Geolocation</strong></p>
+    <p class="fragment"><strong>Drag And Drop</strong></p>
+    <p class="fragment"><strong>File</strong></p>
+    <p class="fragment"><strong>Canvas</strong></p>
+    <p class="fragment"><strong>WebGL</strong></p>
+
+    <aside class="notes">
+
+        <!-- Add some brief explanation why those things should be talked about -->
+
+    </aside>
+</section>
+<section>
+    <section>
+        <h2>History</h2>
+
+        <p>Umożliwia manipulacje historii sesji dla aktualnie przeglądanej strony,
+            bądź dla ramki obecnie załadowanej
+        </p>
+
+        <h4>Metody dla interfejsu History:</h4>
+
+        <ul>
+            <li class="fragment"><strong>History.back()</strong> - Cofa przeglądarkę do strony poprzedniej</li>
+            <li class="fragment"><strong>History.forward()</strong> - Nawigacja jedną stronę w przód</li>
+            <li class="fragment"><strong>History.go()</strong> - Pozwala załadować konkretną stronę z historii</li>
+            <li class="fragment"><strong>History.pushState()</strong> - Pozwala nadpisać dowolnie historię przeglądania, włącznie z adresem URL</li>
+            <li class="fragment"><strong>History.replaceState()</strong> - Pozwala zastąpić obecny wpis do historii</li>
+        </ul>
+
+    </section>
+
+    <section>
+        <h2>Przykłady:</h2>
+
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Dodaje URL bar.html do obecnego URL strony i wpis do historii
+                var stateObj = { some: "data" }
+                history.pushState(stateObj, "I am new page!", "newPage.html")
+
+                // Zamienia obecny status historii strony
+                history.replaceState(stateObj, "I just replace it...", "replacePage.html")
+
+                // Powrót do strony, z której zaczęliśmy
+                History.back()
+            </code>
+        </pre>
+    </section>
+</section>
+<section>
+    <section>
+        <h2>Geolocation</h2>
+
+        <p>Interfejs ten pozwala uzyskać dostęp do obecnej lokalizacji urządzenia. Umożliwia to personalizowanie
+            ustawien aplikacji zależnie od regionu geograficznego.
+        </p>
+
+        <p><strong>Uwaga!</strong> Geolocation API może być serwowane tylko i wyłącznie pod protokołem HTTPS</p>
+
+        <pre>
+            <code data-trim class="javascript hljs">
+                var geo = navigator.geolocation
+
+                geo.getCurrentPosition(function(position) {
+                    // Po uzyskanej zgodzie uzytkownika
+                    var latitude = position.latitude
+                    var longitude = position.longitude
+
+                    console.log('Szerokość: ' + latitude, 'Długość: ' + longitude)
+                })
+            </code>
+        </pre>
+
+        <aside class="notes"></aside>
+
+    </section>
+</section>
+<section>
+    <h2>Drag and Drop</h2>
+
+    <p>Umożliwia wykonanie akcji "przeciągnij i upuść" w przeglądarce, dokładnie w polu nasłuchującym
+        takiego wydarzenia. Interfejs ten jest ściśle związany z serią eventów:</p>
+
+    <p><strong>Wybrane eventy:</strong></p>
+    <hr>
+    
+    <p><strong>drag</strong> - przeciąganie w trakcie</p>
+    <p><strong>dragover</strong> - przeciąganie nad elementem docelowym</p>
+    <p><strong>dragstart</strong> - odpala gdy zaczyna się event "drag"</p>
+    <p><strong>dragend</strong> - oraz gdy się konczy</p>
+    <p><strong>drop</strong> - wykonuje się zaraz przed dragend, konczac przeciaganie przedmiotu</p>
+    <hr>
+
+    <p><strong>Pamiętaj:</strong> aby przedmiot podlegał akcji przeciągnij i upuść, musi posiadać atrybut HTML <strong>draggable="true"</strong></p>
+
+    <aside class="notes"></aside>
+</section>
+<section>
+    <section>
+        <h2>File, FileList</h2>
+
+        <p>Konstruktor FileList tworzony jest w momencie otrzymania na evencie "change",
+            listy plikow załadowanych w formularzu HTML. Do jego instancji dodawane są
+            poszególne, kolejne instancje File, reprezentujące obecnie dodany plik lub pliki.
+        </p>
+
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Prosty HTML input akceptujący typ 'file'
+                <input id="fileInput" type="file" name="userid">
+
+                // Nasłuchiwanie eventu "change",
+                // czyli klinięcia "Otwórz" w oknie wybotu pliku
+                var inp = document.querySelector('#fileInput')
+    
+                inp.addEventListener('change', function(e) {
+                    console.log(e);
+                })
+            </code>
+        </pre>
+
+        <aside class="notes"></aside>
+
+    </section>
+
+    <section>
+        <h2>FileReader</h2>
+
+        <p>Interfejs ten umożliwia asynchroniczne czytanie zawartości pliku z komputera
+            użytkownika, który reprezentowany jest jako instancja File.
+        </p>
+
+        <pre>
+            <code data-trim class="javascript hljs">
+                ...
+                var reader = new FileReader();
+
+                reader.onload = (function(f) {
+                    return function(e) {
+                        // Można użyć 'e.target.result' ablo 'this.result'
+                        // oraz 'f.name'.
+                    };
+                })(file);
+
+                reader.readAsText(file);
+            </code>
+        </pre>
+
+        <aside class="notes"></aside>
+
+    </section>
+</section>
+<section>
+    <section>
+        <h2>Canvas</h2>
+
+        <p><strong>Canvas</strong> został wprowadzony wraz z standardem HTML5, i służy on do rysowania grafik przy
+            użyciu skryptów (zazwyczaj JavaScript). Jedną z możliwości jakie daje jest tworzenie wykresów,
+            dynamicznych animacji a także obiektów 3D.
+        
+            <img src="./images/canvas.gif"/>
+        <aside class="notes"></aside>
+    </section>
+
+    <section>
+        <p>Przykład osadzenia elementu "canvas" w dokumencie HTML</p>
+
+        <pre>
+            <code data-trim class="javascript hljs">
+                // Dokument HTML
+                <canvas id="myCanvas" width="200" height="100"></canvas>
+                
+                // Rysowanie prostej w JavaScript
+                var c = document.getElementById("myCanvas")
+                var ctx = c.getContext("2d")
+                ctx.moveTo(0, 0)
+                ctx.lineTo(200, 100)
+                ctx.stroke()
+            </code>
+        </pre>
+
+    </section>
+</section>
+<section>
+    <section>
+        <h2>WebGL</h2>
+
+        <p>Skrót od <strong>Web Graphics Library</strong>. Jest to Javascript API służący do
+        renderowania interaktywnych grafik 2D i 3D w oknie przeglądarki, z użyciem technologii OpenGL</p>
+
+        <img src="./images/webgl_example.gif" />
+    </section>
+
+    <section>
+        <h4>FPP w przeglądarce? Żaden problem!</h4>
+        
+        <img src="./images/fpp_webgl.gif" />
+    </section>
+</section>
+
+<!-- Thank you -->
+<section data-state="squares-off theme">
+  <!-- class img50 to img400 (width: 50, 100, 150, 200, 250, 300, 350, 400 px ) -->
+  <!-- class padding-bottom, -top, -left, -right (padding-*: 50, 100, 150, 200, 250, 300, 350, 400 px ) -->
+  <img src="./images/akademia-developera.png" alt="logo" class="img300 padding-bottom50" style="margin: 0;">
+  <h2>Dziękuję za uwagę !</h2>
+  <p>Odwiedź: </p>
+  <a href="http://www.facebook.com/AkademiaDeveloperaRzeszow/">www.facebook.com/AkademiaDeveloperaRzeszow</a><br/><br/>
+  <ul class="list-horizontal">
+    <li>Szymon Sitko</li>
+    <li>Software Developer</li>
+  </ul>
+
+  <aside class="notes">
+    Lajkujcie i udostępniajcie!
+  </aside>
+</section>
+
+
+        <!-- TUTAJ KOŃCZY SIĘ PREZENTACJA -->
+    </div>
+</div>
+
+<script type="text/javascript" src="presentation.js"></script></body>
+</html>
