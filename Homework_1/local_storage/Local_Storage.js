@@ -1,35 +1,21 @@
 (function(){
 
-    var first = document.querySelector("#first");
-    var second = document.querySelector("#second");
+    var button_clear_list = document.querySelector("#button_clear_list");
     var third = document.querySelector("#third");
+    var fourth = document.querySelector("#fourth");
     var list = document.querySelector("#list");
     var add = document.querySelector("input[type='submit']");
     var input = document.querySelector("input[type='text']");
     
-    console.log(first);
     console.log(add);
     console.log(input);
 
-    var f1 = function() {
-        console.log("Nacisłeś przycisk first");
-        output1.classList.remove("fail");
-        output1.classList.add("ok");
-
-        localStorage.setItem("Zwierze", "Pies");
-        localStorage.miasto = "Koszalin";
+    function clear_storage() {
+        localStorage.clear();
     }
     
-    function f2() {
-        console.log("nascisłeś przysick second");
-        output1.classList.remove("ok");
-        output1.classList.add("fail");
-
-        localStorage.setItem("Rzecz", "Dupa");
-    }
-    
-    function f3() {
-        console.log("nascisłeś przysick Third");
+    function show_list() {
+        console.log("nascisłeś przysick Show list");
         console.log(localStorage);
         // console.log(localStorage.length);
         for(var czosz in localStorage){
@@ -37,22 +23,23 @@
                 break;
             }
             console.log("klucz: " + czosz + ", wartoszcz: " + localStorage[czosz]);
+            fill_list(localStorage[czosz]);
         }
     }
 
     function add_item(){
         console.log("jestem w add item");
         console.log("to jeee z inputa - " + input.value); 
-        localStorage.setItem(localStorage.length+1, input.value);
+        localStorage.setItem(input.value, " ");
         input.value = "";
     }
 
-    function fill_list() {
+    function fill_list(text) {
         let div_task = document.createElement("div");
         let div_remove = document.createElement("div");
         let div_item = document.createElement("div");
         div_task.classList.add("task");
-        div_task.innerHTML = "noowo stworony elementr";
+        div_task.innerHTML = text;
         div_remove.classList.add("remove");
         div_remove.innerHTML = "remove";
 
@@ -71,18 +58,28 @@
         }
     }
 
-    first.addEventListener("click", fill_list);
-    
-    second.addEventListener("click", clear_list);
+    function remove_item_from_storage(one_item){
+        localStorage.removeItem(one_item);
+    }
 
-    third.addEventListener("click", f3);
+    button_clear_list.addEventListener("click", clear_list);
+
+    third.addEventListener("click", show_list);
+
+    fourth.addEventListener("click", clear_storage);
     
     list.addEventListener("click", function(e){
         console.log(e.target.innerHTML);
         if(e.target.innerHTML == "remove"){
             console.log("To je Remove !!!");
             console.log(this);
-            console.log(e.target.parentNode);
+            console.log(e.target.previousSibling.innerHTML);
+            for( var key in localStorage) {
+                if(localStorage[key] == e.target.previousSibling.innerHTML) {
+                    localStorage.removeItem(key);
+                }
+            }
+          //  console.log(e.target.parentNode);
             e.target.parentNode.remove();
         }
     });
