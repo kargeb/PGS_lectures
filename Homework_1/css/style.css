@@ -1,0 +1,31 @@
+#list {
+    border: solid black 1px;
+    width: 50%;
+    margin: 2% auto;
+}
+
+.task {
+    border: 1px solid blue;
+    padding: 1%
+}
+
+.task .remove {
+    padding-left: 1%;
+    border-left: solid green 2px;
+    float: right;
+}
+
+.output {
+    font-size: 24px;
+    font-weight: bold;
+    border: solid 1px black;
+    display: inline-block;
+}
+
+.ok {
+    color: green;
+}
+
+.fail {
+    color: red;
+}
