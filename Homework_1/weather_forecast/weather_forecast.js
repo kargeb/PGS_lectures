@@ -2,10 +2,11 @@
 
     var button_add = document.querySelector("input[name='button_add']");
     var input = document.querySelector("input[name='input_city']");
+    var list = document.querySelector("#list");
+    var button_check_weather = document.querySelector("#button_check_weather");
+    var city = "olsztyn";
 
-    console.log(button_add);
-    console.log(input);
-
+////////////////////////////////////  City list - add & remove
 
     function show_list() {
         clear_list();
@@ -46,35 +47,74 @@
     }
 
 
-    button_add.addEventListener("click", add_item);
+    function remove_item_from_storage(remove_target){
+
+        if(confirm("Napewno chcesz usunąć to miasto?")){
+            localStorage.removeItem(remove_target.previousSibling.innerHTML);
+            remove_target.parentNode.remove();
+        };
+    }
+
+    list.addEventListener("click", function(e){
+        if(e.target.innerHTML == "remove"){
+            remove_item_from_storage(e.target);
+        }
+    });
+
+/////////////////////////////////////////////////////////////////////
 
     document.addEventListener("DOMContentLoaded", show_list);
 
 
+    function send_data(city) {
+        let url = "http://api.openweathermap.org/data/2.5/forecast?q="+ city + "&appid=09d095681879bfdc3462857a2653dc8c&units=metric";
+        let data = null;
+        let xmlhttp = new XMLHttpRequest();
 
-    var city = "olsztyn";
-    var url = "http://api.openweathermap.org/data/2.5/forecast?q="+ city + "&appid=09d095681879bfdc3462857a2653dc8c&units=metric";
-    var data;
+        console.log("JESTEM W KURWA FUNKCJI");
 
-    var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", url, true);
 
-    xmlhttp.onreadystatechange = function() {
-        if  (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            data = JSON.parse(xmlhttp.responseText);
-        } else {
-            console.log("chuj blont " + xmlhttp.readyState);
+        xmlhttp.onreadystatechange = function() {
+
+            if  (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                data = JSON.parse(xmlhttp.responseText);
+            } 
+
+        };
+
+        xmlhttp.onloadend = function() {
+            console.log("Wczytalo sie:");
+            console.log(data);
+            console.log(data.city.name);
+            average_temp(data);
         }
-    };
-    xmlhttp.open("GET", url, false);
-    xmlhttp.send();
 
-
-    console.log(data.list.length);
-
-    console.log(data.city.name);
-
-    for(var i=0; i<data.list.length; i++) {
-        console.log(data.list[i].main.temp);
-        console.log(data.list[i].dt_txt);
+        xmlhttp.send();
     }
+
+    function check_weather() {
+
+        for(let city in localStorage) {
+            if(city == "length") {
+                break;
+            }
+            send_data(city);
+        }
+    }
+
+    function average_temp(data) {
+
+        let temp = 0;
+        for(let i=0; i<data.list.length; i++) {
+            temp += data.list[i].main.temp
+        }
+        console.log("suma temperatur = " + temp);
+        temp = temp/data.list.length;
+        console.log("srednia = " + temp);
+    }
+
+
+    button_add.addEventListener("click", add_item);
+    button_check_weather.addEventListener("click", check_weather);
 })();
