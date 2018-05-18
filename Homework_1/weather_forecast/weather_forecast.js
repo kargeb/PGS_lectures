@@ -4,18 +4,30 @@
     var input = document.querySelector("input[name='input_city']");
     var list = document.querySelector("#list");
     var button_check_weather = document.querySelector("#button_check_weather");
+    var button_show_map = document.querySelector("#button_show_map");
     var city = "olsztyn";
+    var cityMap = new Map();
+
 
 ////////////////////////////////////  City list - add & remove
 
+    // function fill_map() {
+    //     for(var czosz in localStorage){
+    //         if(czosz == "length") {
+    //             break;
+    //         }
+    //         cityMap.set
+    //     }    
+    // }
+
     function show_list() {
         clear_list();
-        for(var czosz in localStorage){
-            if(czosz == "length") {
-                break;
+            for(var czosz in localStorage){
+                if(czosz == "length") {
+                    break;
+                }
+                fill_list(czosz);
             }
-            fill_list(czosz);
-        }
     }
 
     function add_item(){
@@ -87,7 +99,7 @@
             console.log("Wczytalo sie:");
             console.log(data);
             console.log(data.city.name);
-            average_temp(data);
+            cityMap.set(data.city.name,average_temp(data));
         }
 
         xmlhttp.send();
@@ -101,6 +113,7 @@
             }
             send_data(city);
         }
+        show_map();
     }
 
     function average_temp(data) {
@@ -112,9 +125,20 @@
         console.log("suma temperatur = " + temp);
         temp = temp/data.list.length;
         console.log("srednia = " + temp);
+        return temp;
+    }
+
+    function show_map() {
+        console.log("JESTEM W SZOW MAP");
+        // cityMap.values();
+        // cityMap.keys();
+        for(let each of cityMap.entries()){
+            console.log(each);
+        }
     }
 
 
     button_add.addEventListener("click", add_item);
     button_check_weather.addEventListener("click", check_weather);
+    button_show_map.addEventListener("click", show_map);
 })();
