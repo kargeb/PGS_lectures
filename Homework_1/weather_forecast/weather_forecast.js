@@ -1,21 +1,54 @@
 (function(){
 
-    console.log("Nadupcamy prognoze");
-
     var button_add = document.querySelector("input[name='button_add']");
     var input = document.querySelector("input[name='input_city']");
 
     console.log(button_add);
     console.log(input);
 
-    function add_to_list(city) {
-        
+
+    function show_list() {
+        clear_list();
+        for(var czosz in localStorage){
+            if(czosz == "length") {
+                break;
+            }
+            fill_list(czosz);
+        }
+    }
+
+    function add_item(){
+        localStorage.setItem(input.value, "whether");
+        input.value = "";
+        show_list();
+    }
+
+    function fill_list(text) {
+        let div_task = document.createElement("div");
+        let div_remove = document.createElement("div");
+        let div_item = document.createElement("div");
+        div_task.classList.add("task");
+        div_task.innerHTML = text;
+        div_remove.classList.add("remove");
+        div_remove.innerHTML = "remove";
+
+        div_item.appendChild(div_task);
+        div_item.appendChild(div_remove);
+        div_item.classList.add("item");
+
+        list.appendChild(div_item);
+    }
+
+    function clear_list() {
+        while(list.firstElementChild){
+            list.removeChild(list.firstElementChild);
+        }
     }
 
 
-    button_add.addEventListener("click")
+    button_add.addEventListener("click", add_item);
 
-
+    document.addEventListener("DOMContentLoaded", show_list);
 
 
 

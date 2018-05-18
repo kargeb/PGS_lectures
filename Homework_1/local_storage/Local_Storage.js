@@ -22,7 +22,7 @@
     }
 
     function add_item(){
-        localStorage.setItem(input.value, " ");
+        localStorage.setItem(input.value, "todo");
         input.value = "";
         show_list();
     }
