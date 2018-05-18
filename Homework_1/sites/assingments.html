@@ -8,20 +8,57 @@
     <link rel="stylesheet" type="text/css" media="screen" href="../css/style.css" />
 </head>
 <body>
-    <h2>Assingment 6:</h2>
-    <h3>Zrobić listę zadań do wykonania (todo app) zapisywaną w localStorage.</h3>
-    <p>Co powinno zostać zrobione:</p>
-    <ol>
-        <li>Możliwość dodania nowych zadań do zrobienia </li>
-        <li>Usuwanie istniejących zadań</li>
-        <li>Komunikat (czy na pewno usunąć) w trakcie usuwania</li>
-        <li>Zapisywanie w localStorage</li>
-        <li>Dane powinny być pobrane i wyświetlone z localStorage po uruchomieniu aplikacji</li>
-    </ol>
-    <p>Aplikacja powinna wyglądać tak jak na załączonych obrazkach:</p>
-    <img src="../images/ls_look_1.png">
-    <img src="../images/ls_look_2.png">
+    <a href="../index.html">Main page</a>
+    <article>
+        <h2>Assingment 6:</h2>
+        <h3>Zrobić listę zadań do wykonania (todo app) zapisywaną w localStorage.</h3>
+        <p>Co powinno zostać zrobione:</p>
+        <ol>
+            <li>Możliwość dodania nowych zadań do zrobienia </li>
+            <li>Usuwanie istniejących zadań</li>
+            <li>Komunikat (czy na pewno usunąć) w trakcie usuwania</li>
+            <li>Zapisywanie w localStorage</li>
+            <li>Dane powinny być pobrane i wyświetlone z localStorage po uruchomieniu aplikacji</li>
+        </ol>
+        <p>Aplikacja powinna wyglądać tak jak na załączonych obrazkach:</p>
+        <img src="../images/ls_look_1.png">
+        <img src="../images/ls_look_2.png">
 
-    <p>Do komunikatu przed usunięciem można użyć funkcje <a href="https://www.w3schools.com/jsref/met_win_confirm.asp" target="_blank">confirm</a></p>
+        <p>Do komunikatu przed usunięciem można użyć funkcje <a href="https://www.w3schools.com/jsref/met_win_confirm.asp" target="_blank">confirm</a></p>
+    </article>
+    <hr>
+    <article>
+        <h2>Assingment 7:</h2>
+        <h3>Napisać jedno-stronicową aplikację, która, dla wybranych przez użytkownika miast, 
+            będzie wyświetlać średnią prognozowaną temperaturę na najbliższe 5 dni.</h3>
+        <h4>Wymagania funkcjonalne:</h4>
+        <ul>
+            <li>użytkownik ma możliwość wpisania nazwy miasta i dodania go do listy </li>
+            <li>użytkownik ma możliwość usunięcia każdej pozycji z listy</li>
+            <li>lista jest zapisywana w localStorage, po ponownym otwarciu, użytkownik widzi wcześniej stworzoną listę</li>
+        </ul>
+        <h4>Wymagania niefunkcjonalne (techniczne):</h4>
+        <ul>
+            <li>aplikacja powinna być pakietem NPM (zawierać plik package.json)</li>
+            <li>kod JavaScript aplikacji powinien być podzielony na pliki, ale budowany do jednego pliku "bundle"</li>
+            <li>pliki powinny być modułami ES6 wydzielonym według odpowiedzialności, a więc: klient OpenWeatherMap, moduł przeliczający średnią, moduł do komunikacji z localStorage, ...</li>
+            <li>do tworzenia pliku "bundle" używamy Webpack'ale</li>
+            <li>kod powinien używać konstrukcji języka ES6. Przede wszystkim ES6 modules, ale też innych omawianych na wykładzie, jak przykładowo destructuring assignment. </li>
+            <li>na czas komunikacji z API (request w trakcie) przyciski powinny być blokowane i wyszarzane.</li>
+        </ul>
+        <h4>Wskazówki:</h4>
+        <ul>
+            <li>dane pogodowe można pobrać z serwisu OpenWeatherMap (prognoza 5-dniowa 
+                <a href="https://openweathermap.org/forecast5" target="_blank">https://openweathermap.org/forecast5</a>- aby uzyskać AppID, trzeba założyć darmowe konto</li>
+            <li>dodatkowe, drobne usprawnienia UX mile widziane</li>
+            <li>mock-up jest załączony do zadania:</li>
+        </ul>        
+        <img src="../images/mock-up.png">
+
+        <p>Polecany tutorial do Webpacka:
+                <a href="https://youtu.be/eWmkBNBTbMM " target="_blank">https://youtu.be/eWmkBNBTbMM </a>
+                zwracam uwagę, że tutorial powstał już jakiś czas temu i mogą być drobne różnice gdy będziecie go przerabiać z najnowszym Webpackiem 4.x</p>
+
+    </article>
 </body>
 </html>
