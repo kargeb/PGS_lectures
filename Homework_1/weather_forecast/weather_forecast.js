@@ -5,8 +5,7 @@
     var list = document.querySelector("#list");
     var button_check_weather = document.querySelector("#button_check_weather");
     var button_show_map = document.querySelector("#button_show_map");
-    var city = "olsztyn";
-    var cityMap = new Map();
+    var map_city = new Map();
 
 
 ////////////////////////////////////  City list - add & remove
@@ -16,9 +15,38 @@
     //         if(czosz == "length") {
     //             break;
     //         }
-    //         cityMap.set
+    //       r map_city.set
     //     }    
     // }
+
+    function load_from_local_storage(map) {
+        map = new Map();
+        if(localStorage.length) {
+            for(let key in localStorage ) {
+                    if(key == "length") {
+                        break;
+                    }        
+                map.set(key);
+            }
+        } else {
+            console.log("local storage puste ni ma nic");
+        }
+
+        console.log(localStorage);
+        console.log(map);
+
+        return map;
+    }
+
+    function show_list_from_map(map) {
+        for(let key of map) {
+            console.log("klucz z ahowformmap" + map.get(key) + " i wartosc");
+            console.log(key);
+            // console.log(map.keys() + " " + map.values());
+            fill_list(key);
+        }
+    }
+
 
     function show_list() {
         clear_list();
@@ -75,7 +103,21 @@
 
 /////////////////////////////////////////////////////////////////////
 
-    document.addEventListener("DOMContentLoaded", show_list);
+    // document.addEventListener("DOMContentLoaded", show_list);
+    // document.addEventListener("DOMContentLoaded", load_from_local_storage);
+
+    document.addEventListener("DOMContentLoaded", function(){
+
+        console.log(map_city);
+
+        map_city = load_from_local_storage();
+        
+        console.log(map_city);
+        show_list_from_map(map_city);
+
+
+
+    });
 
 
     function send_data(city) {
@@ -99,7 +141,7 @@
             console.log("Wczytalo sie:");
             console.log(data);
             console.log(data.city.name);
-            cityMap.set(data.city.name,average_temp(data));
+         map_city.set(data.city.name,average_temp(data));
         }
 
         xmlhttp.send();
@@ -130,9 +172,9 @@
 
     function show_map() {
         console.log("JESTEM W SZOW MAP");
-        // cityMap.values();
-        // cityMap.keys();
-        for(let each of cityMap.entries()){
+           map_city.values();
+           map_city.keys();
+        for(let each in map_city.entries()){
             console.log(each);
         }
     }
