@@ -93,16 +93,34 @@
     document.addEventListener("DOMContentLoaded", function(){
 
         map_city = load_from_local_storage();
-        check_weather();
-
-        // h3.innerHTML = "dupa";
-        // get_temp();
+        // check_weather();
         
-        // console.log(map_city);
-        // show_list_from_map();
-
+        show_map();
+        show_list_from_map();
+        check_weather();
+        
+        // insert_temp_to_table();
 
     });
+
+    function insert_temp_to_table(key, value) {
+        console.log(list);
+        var items = document.querySelectorAll(".task");
+
+        for(let i=0; i< items.length; i++) {
+            console.log("i = " + i);
+            if(items[i].innerHTML == key) {
+                console.log(key + " jest na poz: " + i);
+                items[i].innerHTML = items[i].innerHTML + " " + value;
+                break;
+            }
+        }
+
+
+        // console.log(items);
+        // console.log(items[4]);
+        // console.log(items[4].innerHTML = items[4].innerHTML + " dupa dupa dupa");
+    }
 
 
     function send_data(city) {
@@ -112,7 +130,7 @@
         let data = null;
         let xmlhttp = new XMLHttpRequest();
 
-        xmlhttp.open("GET", url, false);
+        xmlhttp.open("GET", url);
 
         // xmlhttp.onreadystatechange = function() {
 
@@ -121,69 +139,50 @@
         //     } 
 
         // };
-        // let p = new Promise(function(resolve, reject){   
+         var p = new Promise(function(resolve, reject){   
 
-            xmlhttp.onload = function() {
-                if (xmlhttp.status == 200) {
+                    xmlhttp.onload = function() {
+                        if (xmlhttp.status == 200) {
 
-                    data = JSON.parse(xmlhttp.responseText);
-                    temp = Math.trunc(average_temp(data));
-                    map_city.set(city,temp);
+                            data = JSON.parse(xmlhttp.responseText);
+                            temp = Math.trunc(average_temp(data));
+                            map_city.set(city,temp);
 
-                    // console.log("temp z onlad " + temp);
-                    // resolve(temp);
+                            // console.log("temp z onlad " + temp);
+                             resolve(temp);
 
-                } else {
-                    // reject("error");
-                }
-            }
+                        } else {
+                            // reject("error");
+                        }
+                    }
+            });
 
-        // });
+            p.then((temp) => { 
+                console.log("z promuise: " + temp);
+                console.log("dupa z promise innne");
+                console.log("dane dla tego prmisa: " + city + temp);
+                insert_temp_to_table(city, temp);
 
-        // xmlhttp.onloadend = function() {
-
-        //     city_name = data.city.name;
-        //     temp = Math.trunc(average_temp(data));
-        //     map_city.set(city,temp);
-        //     return temp;
-        // }
+             });
 
         xmlhttp.send();
-
-        // return p;
 
     }
 
     function check_weather() {
 
-        //  let p = new Promise(function(resolve, reject){ 
-
             for (let key of map_city.keys()) {
 
+                
 
                  send_data(key);
+
             };
-           
 
-        //  });
-
-        // p.then(show_list_from_map());
-  
-        // return p;
-
-         show_map();
-         show_list_from_map();
+        //  show_map();
+        //  show_list_from_map();
 
     }
-
-    // function get_temp() {
-
-    //     check_weather();
-
-
-
-
-    // }
 
     function average_temp(data) {
 
