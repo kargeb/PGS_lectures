@@ -68,6 +68,7 @@
         input.value = "";        
         map_city = load_from_local_storage();
         show_list_from_map();
+        check_weather();
     }
 
     function clear_list() {
@@ -78,11 +79,11 @@
 
     function remove_city(target) {
         if(confirm("Napewno chcesz usunąć to miasto?")){
-            console.log(target.previousSibling.innerHTML)
-            localStorage.removeItem(target.previousSibling.innerHTML);
+            let city_to_remove_arr = (target.previousSibling.innerHTML).split(" ");
+            localStorage.removeItem(city_to_remove_arr[0].toLowerCase());
             map_city =  load_from_local_storage();
             show_list_from_map();
-            // remove_target.parentNode.remove();
+            check_weather();
         };
     }
 
@@ -93,14 +94,13 @@
     document.addEventListener("DOMContentLoaded", function(){
 
         map_city = load_from_local_storage();
-        // check_weather();
-        
+
         show_map();
         show_list_from_map();
         check_weather();
-        
-        // insert_temp_to_table();
 
+        // h3.classList.add("promise");
+        // h3.classList.remove("promise");
     });
 
     function insert_temp_to_table(key, value) {
@@ -115,73 +115,43 @@
                 break;
             }
         }
-
-
-        // console.log(items);
-        // console.log(items[4]);
-        // console.log(items[4].innerHTML = items[4].innerHTML + " dupa dupa dupa");
     }
 
 
-    function send_data(city) {
+    function check_weather() {
         let temp;
         let city_name;
-        let url = "http://api.openweathermap.org/data/2.5/forecast?q="+ city + "&appid=09d095681879bfdc3462857a2653dc8c&units=metric";
-        let data = null;
-        let xmlhttp = new XMLHttpRequest();
 
-        xmlhttp.open("GET", url);
+        for (let key of map_city.keys()) {
 
-        // xmlhttp.onreadystatechange = function() {
+            let url = "http://api.openweathermap.org/data/2.5/forecast?q="+ key + "&appid=09d095681879bfdc3462857a2653dc8c&units=metric";
+            let data = null;
+            let xmlhttp = new XMLHttpRequest();
+            
+            xmlhttp.open("GET", url);
+     
+            var p = new Promise(function(resolve, reject){   
 
-        //     if  (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-        //         data = JSON.parse(xmlhttp.responseText);
-        //     } 
-
-        // };
-         var p = new Promise(function(resolve, reject){   
-
+                h3.classList.add("promise");
                     xmlhttp.onload = function() {
                         if (xmlhttp.status == 200) {
 
                             data = JSON.parse(xmlhttp.responseText);
                             temp = Math.trunc(average_temp(data));
-                            map_city.set(city,temp);
+                            map_city.set(key,temp);
 
-                            // console.log("temp z onlad " + temp);
-                             resolve(temp);
-
-                        } else {
-                            // reject("error");
-                        }
+                            resolve(temp);
+                        } 
                     }
             });
 
             p.then((temp) => { 
-                console.log("z promuise: " + temp);
-                console.log("dupa z promise innne");
-                console.log("dane dla tego prmisa: " + city + temp);
-                insert_temp_to_table(city, temp);
+                h3.classList.remove("promise");
+                insert_temp_to_table(key, temp);
+            });
 
-             });
-
-        xmlhttp.send();
-
-    }
-
-    function check_weather() {
-
-            for (let key of map_city.keys()) {
-
-                
-
-                 send_data(key);
-
-            };
-
-        //  show_map();
-        //  show_list_from_map();
-
+            xmlhttp.send();
+        };
     }
 
     function average_temp(data) {
@@ -211,4 +181,5 @@
             remove_city(e.target);
         }
     });
+
 })();

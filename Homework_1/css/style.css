@@ -8,6 +8,10 @@ input[name="new"]{
     width: 50%;
 }
 
+.promise {
+    background-color: black;
+}
+
  .item {
     border: 1px solid black;
     display: flex;
