@@ -8,8 +8,16 @@ input[name="new"]{
     width: 50%;
 }
 
+.show {
+    display: inline-block;
+}
+
+.hide {
+    display: none;
+}
+
 .promise {
-    background-color: black;
+    background-color: grey !important;
 }
 
  .item {

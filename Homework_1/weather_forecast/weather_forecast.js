@@ -5,13 +5,37 @@
     var button_check_weather = document.querySelector("#button_check_weather");
     var button_show_map = document.querySelector("#button_show_map");
     var button_add_city = document.querySelector("#button_add_city");
+    var progress = document.querySelector("#progress");
     var map_city = new Map();
-    var h3 = document.querySelector("h3");
 
 
 ////////////////////////////////////  City list - add & remove
     
  //--------------------------------------------------------------------------------   
+
+    document.addEventListener("DOMContentLoaded", function(){
+
+        progress.classList.add("hide");
+        map_city = load_from_local_storage();
+        if(map_city.size) {
+            show_list_from_map();
+            check_weather();
+        }
+
+    });
+
+
+    function buttons_off() {
+        button_check_weather.disabled = true;
+        button_show_map.disabled = true;
+        button_add_city.disabled = true;
+    }
+
+    function buttons_on() {
+        button_check_weather.disabled = false;
+        button_show_map.disabled = false;
+        button_add_city.disabled = false;
+    }
 
     function load_from_local_storage() {
         let map = new Map();
@@ -19,9 +43,9 @@
             for(let key in localStorage ) {
                     if(key == "length") {
                         break;
-                    }        
-
-                map.set( capitalizeFirstLetter(key));
+                    } else if ( localStorage.getItem(key) == "city") {
+                        map.set( capitalizeFirstLetter(key));
+                    }       
             }
         } else {
             console.log("local storage puste ni ma nic");
@@ -64,7 +88,7 @@
     }
 
     function add_city() {
-        localStorage.setItem(input.value, "whether");
+        localStorage.setItem(input.value, "city");
         input.value = "";        
         map_city = load_from_local_storage();
         show_list_from_map();
@@ -83,7 +107,9 @@
             localStorage.removeItem(city_to_remove_arr[0].toLowerCase());
             map_city =  load_from_local_storage();
             show_list_from_map();
-            check_weather();
+            if(map_city.size) {
+                check_weather();
+            }
         };
     }
 
@@ -91,26 +117,11 @@
 /////////////////////////////////////////////////////////////////////
 
 
-    document.addEventListener("DOMContentLoaded", function(){
-
-        map_city = load_from_local_storage();
-
-        show_map();
-        show_list_from_map();
-        check_weather();
-
-        // h3.classList.add("promise");
-        // h3.classList.remove("promise");
-    });
-
     function insert_temp_to_table(key, value) {
-        console.log(list);
         var items = document.querySelectorAll(".task");
 
         for(let i=0; i< items.length; i++) {
-            console.log("i = " + i);
             if(items[i].innerHTML == key) {
-                console.log(key + " jest na poz: " + i);
                 items[i].innerHTML = items[i].innerHTML + " " + value;
                 break;
             }
@@ -122,6 +133,13 @@
         let temp;
         let city_name;
 
+        progress.classList.remove("hide");
+        // progress.classList.add("show");
+        let counter = 0;
+        progress.value = 0;
+        progress.max = map_city.size;
+        buttons_off();
+
         for (let key of map_city.keys()) {
 
             let url = "http://api.openweathermap.org/data/2.5/forecast?q="+ key + "&appid=09d095681879bfdc3462857a2653dc8c&units=metric";
@@ -132,7 +150,7 @@
      
             var p = new Promise(function(resolve, reject){   
 
-                h3.classList.add("promise");
+                
                     xmlhttp.onload = function() {
                         if (xmlhttp.status == 200) {
 
@@ -141,13 +159,31 @@
                             map_city.set(key,temp);
 
                             resolve(temp);
+                        } else {
+                            reject("Nie ma takiego miasta w bazie!");
                         } 
                     }
             });
 
             p.then((temp) => { 
-                h3.classList.remove("promise");
-                insert_temp_to_table(key, temp);
+                
+                insert_temp_to_table(key, temp + "&#8451;");
+                counter++;
+                progress.value = counter;
+                if(counter == map_city.size) {
+                    buttons_on();
+                    progress.classList.add("hide");
+                }
+            }, (error) => { 
+                console.log(error); 
+                insert_temp_to_table(key, error);
+                counter++;
+                progress.value = counter;
+                if(counter == map_city.size) {
+                    buttons_on();
+                    progress.classList.add("hide");
+                }
+
             });
 
             xmlhttp.send();
@@ -160,14 +196,13 @@
         for(let i=0; i<data.list.length; i++) {
             temp += data.list[i].main.temp
         }
-        console.log("suma temperatur = " + temp);
         temp = temp/data.list.length;
-        console.log("srednia = " + temp);
         return temp;
     }
 
     function show_map() {
         console.log("JESTEM W SZOW MAP");
+           console.log(map_city.size);
            console.log(map_city.values());
            console.log(map_city.keys());
     }
@@ -183,3 +218,9 @@
     });
 
 })();
+
+        // var removes = document.querySelectorAll(".remove");
+        // console.log(removes);
+        // for(let rem of removes){
+        //     rem.classList.add("promise");
+        // }  

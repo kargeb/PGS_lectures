@@ -16,8 +16,9 @@
         for(var czosz in localStorage){
             if(czosz == "length") {
                 break;
-            }
-            fill_list(czosz);
+            } else if ( localStorage.getItem(czosz) == "todo" ) {
+                fill_list(czosz);
+            } 
         }
     }
 
