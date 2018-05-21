@@ -1,8 +1,11 @@
-import { save_in_storage, load_from_storage } from "../modules/local_storage_module.js";
+import { save_in_storage, 
+        load_from_storage,
+        clear_storage,
+        remove_one_item_from_storage } from "../modules/local_storage_module.js";
+
+import { TODO_LS_VALUE } from "../modules/constants.js";       
 
 (function(){
-
-    
 
     var button_clear_list = document.querySelector("#button_clear_list");
     var button_show_list = document.querySelector("#button_show_list");
@@ -12,33 +15,18 @@ import { save_in_storage, load_from_storage } from "../modules/local_storage_mod
     var input = document.querySelector("input[type='text']");
     let tasks = new Set();
 
-    function clear_storage() {
-        localStorage.clear();
-    }
-    
+
     function show_list() {
         clear_list()
-        tasks = load_from_storage("todo");
+        tasks = load_from_storage( TODO_LS_VALUE );
         console.log(tasks);
         for(let task of tasks) {
             fill_list(task);
         }
     }
 
-    // function show_list() {
-    //     clear_list();
-    //     for(var czosz in localStorage){
-    //         if(czosz == "length") {
-    //             break;
-    //         } else if ( localStorage.getItem(czosz) == "todo" ) {
-    //             fill_list(czosz);
-    //         } 
-    //     }
-    // }
-
     function add_item(){
-        // MODULE // localStorage.setItem(input.value, "todo");
-        save_in_storage(input.value, "todo");
+        save_in_storage(input.value, TODO_LS_VALUE );
         input.value = "";
         show_list();
     }
@@ -65,21 +53,24 @@ import { save_in_storage, load_from_storage } from "../modules/local_storage_mod
         }
     }
 
-    function remove_item_from_storage(remove_target){
-
+    function remove_element(remove_target){
         if(confirm("Napewno chcesz usunąć to zadanie?")){
-            localStorage.removeItem(remove_target.previousSibling.innerHTML);
+            let item = remove_target.previousSibling.innerHTML;
+            remove_one_item_from_storage(item);
             remove_target.parentNode.remove();
         };
     }
 
     button_clear_list.addEventListener("click", clear_list);
     button_show_list.addEventListener("click", show_list);
-    button_clear_storage.addEventListener("click", clear_storage);
-    
+    button_clear_storage.addEventListener("click", function(){
+        clear_storage( TODO_LS_VALUE );
+        clear_list();
+    });
+
     list.addEventListener("click", function(e){
         if(e.target.innerHTML == "remove"){
-            remove_item_from_storage(e.target);
+            remove_element(e.target);
         }
     });
     
@@ -87,7 +78,6 @@ import { save_in_storage, load_from_storage } from "../modules/local_storage_mod
         e.preventDefault();
     })
     add.addEventListener("click", add_item);
-
     document.addEventListener("DOMContentLoaded", show_list);
 
 })();
