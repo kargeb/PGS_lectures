@@ -1,4 +1,8 @@
+import { save_in_storage } from "../modules/local_storage_module.js";
+
 (function(){
+
+    
 
     var button_clear_list = document.querySelector("#button_clear_list");
     var button_show_list = document.querySelector("#button_show_list");
@@ -23,7 +27,8 @@
     }
 
     function add_item(){
-        localStorage.setItem(input.value, "todo");
+        // MODULE // localStorage.setItem(input.value, "todo");
+        save_in_storage(input.value, "todo");
         input.value = "";
         show_list();
     }
