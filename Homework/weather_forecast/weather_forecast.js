@@ -2,6 +2,8 @@
             save_in_storage,
             remove_one_item_from_storage } from "../modules/local_storage_module.js";
 
+import { send_to_open_weather } from "../modules/open_weather_module.js";            
+
 (function(){
 
     var input = document.querySelector("input[name='input_city']");
@@ -144,46 +146,55 @@
             }
         }
     }
+    
+    // xmlhttp.onload = function() {
+    //     if (xmlhttp.status == 200) {
 
+    //         data = JSON.parse(xmlhttp.responseText);
+    //         temp = Math.trunc(average_temp(data));
+    //         map_city.set(key,temp);
 
+    //         resolve(temp);
+    //     } else {
+        //         reject("Nie ma takiego miasta w bazie!");
+        //     } 
+        // }
+        // let url = "http://api.openweathermap.org/data/2.5/forecast?q="+ key + "&appid=09d095681879bfdc3462857a2653dc8c&units=metric";
+        // let xmlhttp = new XMLHttpRequest();
+        
+        // xmlhttp.open("GET", url);
+        
     function check_weather() {
         let temp;
         let city_name;
+        let counter = 0;
 
         progress.classList.remove("hide");
-        // progress.classList.add("show");
-        let counter = 0;
         progress.value = 0;
         progress.max = map_city.size;
         buttons_off();
 
         for (let key of map_city.keys()) {
 
-            let url = "http://api.openweathermap.org/data/2.5/forecast?q="+ key + "&appid=09d095681879bfdc3462857a2653dc8c&units=metric";
-            let data = null;
-            let xmlhttp = new XMLHttpRequest();
-            
-            xmlhttp.open("GET", url);
-     
-            var p = new Promise(function(resolve, reject){   
-
+            var p = new Promise(
                 
-                    xmlhttp.onload = function() {
-                        if (xmlhttp.status == 200) {
 
-                            data = JSON.parse(xmlhttp.responseText);
-                            temp = Math.trunc(average_temp(data));
-                            map_city.set(key,temp);
+                function(resolve, reject){  
 
-                            resolve(temp);
-                        } else {
-                            reject("Nie ma takiego miasta w bazie!");
-                        } 
-                    }
+                console.log("city - " + key);
+               let data = send_to_open_weather(key);
+                    resolve(data);
+                
             });
-
-            p.then((temp) => { 
+            
+            p.then((data) => { 
                 
+                console.log("z thena " + data);
+                 temp = average_temp(data);
+               
+
+                map_city.set(key,temp);
+
                 insert_temp_to_table(key, temp + "&#8451;");
                 counter++;
                 progress.value = counter;
@@ -191,19 +202,20 @@
                     buttons_on();
                     progress.classList.add("hide");
                 }
-            }, (error) => { 
-                console.log(error); 
-                insert_temp_to_table(key, error);
-                counter++;
-                progress.value = counter;
-                if(counter == map_city.size) {
-                    buttons_on();
-                    progress.classList.add("hide");
-                }
-
             });
+            //  , (data) => { 
+            //     console.log(data); 
+            //     map_city.set(key,temp)
+            //     insert_temp_to_table(key, data);
+            //     counter++;
+            //     progress.value = counter;
+            //     if(counter == map_city.size) {
+            //         buttons_on();
+            //         progress.classList.add("hide");
+            //     }
 
-            xmlhttp.send();
+            // });
+
         };
     }
 
