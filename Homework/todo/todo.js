@@ -20,7 +20,7 @@ import { TODO_LS_VALUE } from "../modules/constants.js";
         clear_list()
         tasks = load_from_storage( TODO_LS_VALUE );
         console.log(tasks);
-        for(let task of tasks) {
+        for(let task of tasks.keys()) {
             fill_list(task);
         }
     }
@@ -77,6 +77,7 @@ import { TODO_LS_VALUE } from "../modules/constants.js";
     add.addEventListener("click", function(e){
         e.preventDefault();
     })
+
     add.addEventListener("click", add_item);
     document.addEventListener("DOMContentLoaded", show_list);
 

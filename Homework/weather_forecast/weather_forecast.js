@@ -1,3 +1,7 @@
+ import {   load_from_storage,
+            save_in_storage,
+            remove_one_item_from_storage } from "../modules/local_storage_module.js";
+
 (function(){
 
     var input = document.querySelector("input[name='input_city']");
@@ -16,14 +20,13 @@
     document.addEventListener("DOMContentLoaded", function(){
 
         progress.classList.add("hide");
-        map_city = load_from_local_storage();
-        if(map_city.size) {
-            show_list_from_map();
-            check_weather();
-        }
+        map_city = load_from_storage("whether");
+        map_city = capitalizeFirstLetter(map_city);
+        console.log(map_city);
+        show_list_from_map();
+        // check_weather();
 
     });
-
 
     function buttons_off() {
         button_check_weather.disabled = true;
@@ -37,25 +40,36 @@
         button_add_city.disabled = false;
     }
 
-    function load_from_local_storage() {
-        let map = new Map();
-        if(localStorage.length) {
-            for(let key in localStorage ) {
-                    if(key == "length") {
-                        break;
-                    } else if ( localStorage.getItem(key) == "city") {
-                        map.set( capitalizeFirstLetter(key));
-                    }       
-            }
-        } else {
-            console.log("local storage puste ni ma nic");
+    // function load_from_local_storage() {
+    //     let map = new Map();
+    //     if(localStorage.length) {
+    //         for(let key in localStorage ) {
+    //                 if(key == "length") {
+    //                     break;
+    //                 } else if ( localStorage.getItem(key) == "city") {
+    //                     map.set( capitalizeFirstLetter(key));
+    //                 }       
+    //         }
+    //     } else {
+    //         console.log("local storage puste ni ma nic");
+    //     }
+
+    //     return map;
+    // }
+
+    // function capitalizeFirstLetter(string) {
+    //     return string.charAt(0).toUpperCase() + string.slice(1);
+    // }
+
+    function capitalizeFirstLetter(map) {
+        let temp_map = new Map();
+
+        for(let city of map.keys()) {
+            city = city.charAt(0).toUpperCase() + city.slice(1);
+            temp_map.set(city);
+
         }
-
-        return map;
-    }
-
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
+        return temp_map;
     }
 
     function show_list_from_map() {
@@ -88,9 +102,10 @@
     }
 
     function add_city() {
-        localStorage.setItem(input.value, "city");
+        save_in_storage(input.value.toLowerCase(), "whether");
         input.value = "";        
-        map_city = load_from_local_storage();
+        map_city = load_from_storage("whether");
+        map_city = capitalizeFirstLetter(map_city);
         show_list_from_map();
         check_weather();
     }
@@ -103,9 +118,12 @@
 
     function remove_city(target) {
         if(confirm("Napewno chcesz usunąć to miasto?")){
-            let city_to_remove_arr = (target.previousSibling.innerHTML).split(" ");
-            localStorage.removeItem(city_to_remove_arr[0].toLowerCase());
-            map_city =  load_from_local_storage();
+            let city_to_remove = (target.previousSibling.innerHTML).split(" ");
+            city_to_remove = city_to_remove[0].toLowerCase();
+            console.log(city_to_remove);
+            remove_one_item_from_storage(city_to_remove);
+            map_city = load_from_storage("whether");
+            map_city = capitalizeFirstLetter(map_city);
             show_list_from_map();
             if(map_city.size) {
                 check_weather();

@@ -3,13 +3,13 @@ function save_in_storage(key, value) {
 }
 
 function load_from_storage(value) {
-    let items = new Set();
+    let items = new Map();
     if(localStorage.length) {
         for(let key in localStorage ) {
                 if(key == "length") {
                     break;
                 } else if ( localStorage.getItem(key) == value) {
-                    items.add(key);
+                    items.set(key);
                 }       
         }
     }

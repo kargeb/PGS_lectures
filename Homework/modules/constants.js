@@ -1,4 +1,4 @@
 const TODO_LS_VALUE = "todo";
 const WEATHER_LS_VALUE = "weather"; 
 
-export { TODO_LS_VALUE };
+export { TODO_LS_VALUE, WEATHER_LS_VALUE };
