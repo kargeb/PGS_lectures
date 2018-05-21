@@ -15,7 +15,7 @@ function send_to_open_weather(city) {
             data = JSON.parse(xhr.responseText);
             console.log("data z request: " + data);
             console.log(data);
-            
+            return data;
         }
 
     }
@@ -25,7 +25,7 @@ function send_to_open_weather(city) {
     }
 
     xhr.send();
-    return data;
+    
     
 }
 

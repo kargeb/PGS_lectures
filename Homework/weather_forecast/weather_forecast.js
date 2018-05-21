@@ -1,8 +1,9 @@
  import {   load_from_storage,
             save_in_storage,
-            remove_one_item_from_storage } from "../modules/local_storage_module.js";
+            remove_one_item_from_storage } from "../modules/local_storage_module.js";          
+import { URL_LEFT_PART, URL_RIGHT_PART, WEATHER_LS_VALUE } from "../modules/constants.js"            
+import { average_temp } from "../modules/calculations.js";
 
-import { send_to_open_weather } from "../modules/open_weather_module.js";            
 
 (function(){
 
@@ -13,20 +14,15 @@ import { send_to_open_weather } from "../modules/open_weather_module.js";
     var button_add_city = document.querySelector("#button_add_city");
     var progress = document.querySelector("#progress");
     var map_city = new Map();
-
-
-////////////////////////////////////  City list - add & remove
-    
- //--------------------------------------------------------------------------------   
+  
 
     document.addEventListener("DOMContentLoaded", function(){
 
         progress.classList.add("hide");
-        map_city = load_from_storage("whether");
+        map_city = load_from_storage(WEATHER_LS_VALUE);
         map_city = capitalizeFirstLetter(map_city);
         console.log(map_city);
         show_list_from_map();
-        // check_weather();
 
     });
 
@@ -42,26 +38,6 @@ import { send_to_open_weather } from "../modules/open_weather_module.js";
         button_add_city.disabled = false;
     }
 
-    // function load_from_local_storage() {
-    //     let map = new Map();
-    //     if(localStorage.length) {
-    //         for(let key in localStorage ) {
-    //                 if(key == "length") {
-    //                     break;
-    //                 } else if ( localStorage.getItem(key) == "city") {
-    //                     map.set( capitalizeFirstLetter(key));
-    //                 }       
-    //         }
-    //     } else {
-    //         console.log("local storage puste ni ma nic");
-    //     }
-
-    //     return map;
-    // }
-
-    // function capitalizeFirstLetter(string) {
-    //     return string.charAt(0).toUpperCase() + string.slice(1);
-    // }
 
     function capitalizeFirstLetter(map) {
         let temp_map = new Map();
@@ -104,9 +80,9 @@ import { send_to_open_weather } from "../modules/open_weather_module.js";
     }
 
     function add_city() {
-        save_in_storage(input.value.toLowerCase(), "whether");
+        save_in_storage(input.value.toLowerCase(), WEATHER_LS_VALUE);
         input.value = "";        
-        map_city = load_from_storage("whether");
+        map_city = load_from_storage(WEATHER_LS_VALUE);
         map_city = capitalizeFirstLetter(map_city);
         show_list_from_map();
         check_weather();
@@ -123,7 +99,7 @@ import { send_to_open_weather } from "../modules/open_weather_module.js";
             let city_to_remove = (target.previousSibling.innerHTML).split(" ");
             city_to_remove = city_to_remove[0].toLowerCase();
             remove_one_item_from_storage(city_to_remove);
-            map_city = load_from_storage("whether");
+            map_city = load_from_storage(WEATHER_LS_VALUE);
             map_city = capitalizeFirstLetter(map_city);
             show_list_from_map();
             if(map_city.size) {
@@ -131,10 +107,6 @@ import { send_to_open_weather } from "../modules/open_weather_module.js";
             }
         };
     }
-
-
-/////////////////////////////////////////////////////////////////////
-
 
     function insert_temp_to_table(key, value) {
         var items = document.querySelectorAll(".task");
@@ -147,87 +119,76 @@ import { send_to_open_weather } from "../modules/open_weather_module.js";
         }
     }
     
-    // xmlhttp.onload = function() {
-    //     if (xmlhttp.status == 200) {
-
-    //         data = JSON.parse(xmlhttp.responseText);
-    //         temp = Math.trunc(average_temp(data));
-    //         map_city.set(key,temp);
-
-    //         resolve(temp);
-    //     } else {
-        //         reject("Nie ma takiego miasta w bazie!");
-        //     } 
-        // }
-        // let url = "http://api.openweathermap.org/data/2.5/forecast?q="+ key + "&appid=09d095681879bfdc3462857a2653dc8c&units=metric";
-        // let xmlhttp = new XMLHttpRequest();
         
-        // xmlhttp.open("GET", url);
-        
-    function check_weather() {
-        let temp;
-        let city_name;
-        let counter = 0;
+        function check_weather() {
+            let temp;
+            let city_name;
+    
+            progress.classList.remove("hide");
+            // progress.classList.add("show");
+            let counter = 0;
+            progress.value = 0;
+            progress.max = map_city.size;
+            buttons_off();
+    
+            for (let key of map_city.keys()) {
+    
 
-        progress.classList.remove("hide");
-        progress.value = 0;
-        progress.max = map_city.size;
-        buttons_off();
+         
+                var p = new Promise(function(resolve, reject){   
 
-        for (let key of map_city.keys()) {
+                    let url = URL_LEFT_PART + key + URL_RIGHT_PART;
+                    let data = null;
+                    let xmlhttp = new XMLHttpRequest();
+                    
+                    
+                    xmlhttp.open("GET", url);
+    
+                    
+                        xmlhttp.onload = function() {
+                            if (xmlhttp.status == 200) {
+    
+                                data = JSON.parse(xmlhttp.responseText);
+                                // temp = Math.trunc(average_temp(data));
+                                // map_city.set(key,temp);
+    
+                                resolve(data);
+                            } else {
+                                reject("Nie ma takiego miasta w bazie!");
+                            } 
+                        }
+                
+                        xmlhttp.send();        
 
-            var p = new Promise(
+                });
+    
                 
 
-                function(resolve, reject){  
-
-                console.log("city - " + key);
-               let data = send_to_open_weather(key);
-                    resolve(data);
+                p.then((data) => { 
+                    temp = Math.trunc(average_temp(data));
+                    map_city.set(key,temp);
+                    insert_temp_to_table(key, temp + "&#8451;");
+                    counter++;
+                    progress.value = counter;
+                    if(counter == map_city.size) {
+                        buttons_on();
+                        progress.classList.add("hide");
+                    }
+                }, (error) => { 
+                    console.log(error); 
+                    insert_temp_to_table(key, error);
+                    counter++;
+                    progress.value = counter;
+                    if(counter == map_city.size) {
+                        buttons_on();
+                        progress.classList.add("hide");
+                    }
+    
+                });
+    
                 
-            });
-            
-            p.then((data) => { 
-                
-                console.log("z thena " + data);
-                 temp = average_temp(data);
-               
-
-                map_city.set(key,temp);
-
-                insert_temp_to_table(key, temp + "&#8451;");
-                counter++;
-                progress.value = counter;
-                if(counter == map_city.size) {
-                    buttons_on();
-                    progress.classList.add("hide");
-                }
-            });
-            //  , (data) => { 
-            //     console.log(data); 
-            //     map_city.set(key,temp)
-            //     insert_temp_to_table(key, data);
-            //     counter++;
-            //     progress.value = counter;
-            //     if(counter == map_city.size) {
-            //         buttons_on();
-            //         progress.classList.add("hide");
-            //     }
-
-            // });
-
-        };
-    }
-
-    function average_temp(data) {
-
-        let temp = 0;
-        for(let i=0; i<data.list.length; i++) {
-            temp += data.list[i].main.temp
+            };
         }
-        temp = temp/data.list.length;
-        return temp;
-    }
 
     function show_map() {
         console.log("JESTEM W SZOW MAP");
@@ -247,9 +208,3 @@ import { send_to_open_weather } from "../modules/open_weather_module.js";
     });
 
 })();
-
-        // var removes = document.querySelectorAll(".remove");
-        // console.log(removes);
-        // for(let rem of removes){
-        //     rem.classList.add("promise");
-        // }  
