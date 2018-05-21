@@ -120,7 +120,6 @@
         if(confirm("Napewno chcesz usunąć to miasto?")){
             let city_to_remove = (target.previousSibling.innerHTML).split(" ");
             city_to_remove = city_to_remove[0].toLowerCase();
-            console.log(city_to_remove);
             remove_one_item_from_storage(city_to_remove);
             map_city = load_from_storage("whether");
             map_city = capitalizeFirstLetter(map_city);
