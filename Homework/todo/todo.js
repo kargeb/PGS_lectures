@@ -1,4 +1,4 @@
-import { save_in_storage } from "../modules/local_storage_module.js";
+import { save_in_storage, load_from_storage } from "../modules/local_storage_module.js";
 
 (function(){
 
@@ -10,21 +10,31 @@ import { save_in_storage } from "../modules/local_storage_module.js";
     var list = document.querySelector("#list");
     var add = document.querySelector("input[type='submit']");
     var input = document.querySelector("input[type='text']");
+    let tasks = new Set();
 
     function clear_storage() {
         localStorage.clear();
     }
     
     function show_list() {
-        clear_list();
-        for(var czosz in localStorage){
-            if(czosz == "length") {
-                break;
-            } else if ( localStorage.getItem(czosz) == "todo" ) {
-                fill_list(czosz);
-            } 
+        clear_list()
+        tasks = load_from_storage("todo");
+        console.log(tasks);
+        for(let task of tasks) {
+            fill_list(task);
         }
     }
+
+    // function show_list() {
+    //     clear_list();
+    //     for(var czosz in localStorage){
+    //         if(czosz == "length") {
+    //             break;
+    //         } else if ( localStorage.getItem(czosz) == "todo" ) {
+    //             fill_list(czosz);
+    //         } 
+    //     }
+    // }
 
     function add_item(){
         // MODULE // localStorage.setItem(input.value, "todo");
