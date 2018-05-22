@@ -8,13 +8,15 @@ import { average_temp } from "../modules/calculations.js";
 (function(){
 
     var input = document.querySelector("input[name='input_city']");
-    var list = document.querySelector("#list");
+    // var list = document.querySelector("#list");
     var button_check_weather = document.querySelector("#button_check_weather");
     var button_show_map = document.querySelector("#button_show_map");
     var button_add_city = document.querySelector("#button_add_city");
     var progress = document.querySelector("#progress");
     var map_city = new Map();
-  
+
+    var table = document.querySelector(".table");
+
 
     document.addEventListener("DOMContentLoaded", function(){
 
@@ -23,18 +25,19 @@ import { average_temp } from "../modules/calculations.js";
         map_city = capitalizeFirstLetter(map_city);
         console.log(map_city);
         show_list_from_map();
+        check_weather();
 
     });
 
     function buttons_off() {
         button_check_weather.disabled = true;
-        button_show_map.disabled = true;
+        // button_show_map.disabled = true;
         button_add_city.disabled = true;
     }
 
     function buttons_on() {
         button_check_weather.disabled = false;
-        button_show_map.disabled = false;
+        // button_show_map.disabled = false;
         button_add_city.disabled = false;
     }
 
@@ -58,26 +61,56 @@ import { average_temp } from "../modules/calculations.js";
     }
 
     function fill_list(city, temp) {
-        let div_task = document.createElement("div");
-        let div_remove = document.createElement("div");
-        let div_item = document.createElement("div");
-        div_task.classList.add("task");
+        let div_city = document.createElement("div");
+        let div_temp = document.createElement("div");
+        let div_id = document.createElement("div");
+        let div_table_row = document.createElement("div");
+        let button_remove = document.createElement("button");
+        div_table_row.classList.add("table-row");
+        button_remove.classList.add("button", "button3");
 
+        div_id.innerHTML = "1";
+        div_city.innerHTML = city;
+        div_temp.innerHTML = temp;
+        button_remove.innerHTML = "Usuń";     
+   
         if(temp) {
-            div_task.innerHTML = city + "       " + temp + " &#8451;";
-        } else {
-            div_task.innerHTML = city;
+            div_temp.innerHTML = temp + " &#8451;";
         }
+        //  else {
+        //     div_task.innerHTML = city;
+        // }        
 
-        div_remove.classList.add("remove");
-        div_remove.innerHTML = "remove";
+        div_table_row.appendChild(div_id);
+        div_table_row.appendChild(div_city);
+        div_table_row.appendChild(div_temp);
+        div_table_row.appendChild(button_remove);
 
-        div_item.appendChild(div_task);
-        div_item.appendChild(div_remove);
-        div_item.classList.add("item");
+        table.appendChild(div_table_row);
 
-        list.appendChild(div_item);
     }
+
+    // function fill_list_old(city, temp) {
+    //     let div_task = document.createElement("div");
+    //     let div_remove = document.createElement("div");
+    //     let div_item = document.createElement("div");
+    //     div_task.classList.add("task");
+
+    //     if(temp) {
+    //         div_task.innerHTML = city + "       " + temp + " &#8451;";
+    //     } else {
+    //         div_task.innerHTML = city;
+    //     }
+
+    //     div_remove.classList.add("remove");
+    //     div_remove.innerHTML = "remove";
+
+    //     div_item.appendChild(div_task);
+    //     div_item.appendChild(div_remove);
+    //     div_item.classList.add("item");
+
+    //     list.appendChild(div_item);
+    // }
 
     function add_city() {
         save_in_storage(input.value.toLowerCase(), WEATHER_LS_VALUE);
@@ -88,16 +121,39 @@ import { average_temp } from "../modules/calculations.js";
         check_weather();
     }
 
+    // function clear_list() {
+    //     while(list.firstElementChild){
+    //         list.removeChild(list.firstElementChild);
+    //     }
+    // }
+
     function clear_list() {
-        while(list.firstElementChild){
-            list.removeChild(list.firstElementChild);
+        while(table.firstElementChild){
+            table.removeChild(table.firstElementChild);
         }
     }
 
+    // function remove_city_old(target) {
+    //     if(confirm("Napewno chcesz usunąć to miasto?")){
+    //         let city_to_remove = (target.previousSibling.innerHTML).split(" ");
+    //         city_to_remove = city_to_remove[0].toLowerCase();
+    //         remove_one_item_from_storage(city_to_remove);
+    //         map_city = load_from_storage(WEATHER_LS_VALUE);
+    //         map_city = capitalizeFirstLetter(map_city);
+    //         show_list_from_map();
+    //         if(map_city.size) {
+    //             check_weather();
+    //         }
+    //     };
+    // }
+
     function remove_city(target) {
         if(confirm("Napewno chcesz usunąć to miasto?")){
-            let city_to_remove = (target.previousSibling.innerHTML).split(" ");
-            city_to_remove = city_to_remove[0].toLowerCase();
+            // let city_to_remove = (target.previousSibling.innerHTML).split(" ");
+            console.log(target);
+            console.log(target.previousElementSibling);
+            let city_to_remove = ( target.previousElementSibling.previousElementSibling.innerHTML);
+            city_to_remove = city_to_remove.toLowerCase();
             remove_one_item_from_storage(city_to_remove);
             map_city = load_from_storage(WEATHER_LS_VALUE);
             map_city = capitalizeFirstLetter(map_city);
@@ -106,18 +162,29 @@ import { average_temp } from "../modules/calculations.js";
                 check_weather();
             }
         };
-    }
+    }    
+
+    // function insert_temp_to_table_old(key, value) {
+    //     var items = document.querySelectorAll(".task");
+
+    //     for(let i=0; i< items.length; i++) {
+    //         if(items[i].innerHTML == key) {
+    //             items[i].innerHTML = items[i].innerHTML + " " + value;
+    //             break;
+    //         }
+    //     }
+    // }
 
     function insert_temp_to_table(key, value) {
-        var items = document.querySelectorAll(".task");
+        var items = document.querySelectorAll(".table-row");
 
         for(let i=0; i< items.length; i++) {
-            if(items[i].innerHTML == key) {
-                items[i].innerHTML = items[i].innerHTML + " " + value;
+            if(items[i].firstElementChild.nextElementSibling.innerHTML == key) {
+                items[i].firstElementChild.nextElementSibling.nextElementSibling.innerHTML = value;
                 break;
             }
         }
-    }
+    }    
     
         
         function check_weather() {
@@ -190,19 +257,22 @@ import { average_temp } from "../modules/calculations.js";
             };
         }
 
-    function show_map() {
-        console.log("JESTEM W SZOW MAP");
-           console.log(map_city.size);
-           console.log(map_city.values());
-           console.log(map_city.keys());
-    }
+    // function show_map() {
+    //     console.log("JESTEM W SZOW MAP");
+    //        console.log(map_city.size);
+    //        console.log(map_city.values());
+    //        console.log(map_city.keys());
+    // }
 
     button_add_city.addEventListener("click", add_city);
     button_check_weather.addEventListener("click", check_weather);
-    button_show_map.addEventListener("click", show_map);
+    // button_show_map.addEventListener("click", show_map);
+    // button_show_map.addEventListener("click", function(){
+    //     rob_wiersz("albigowa", 30);
+    // });
 
-    list.addEventListener("click", function(e){
-        if(e.target.innerHTML == "remove"){
+    table.addEventListener("click", function(e){
+        if(e.target.innerHTML == "Usuń"){
             remove_city(e.target);
         }
     });

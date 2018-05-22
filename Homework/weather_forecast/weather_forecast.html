@@ -9,23 +9,56 @@
 </head>
 <body>
     <a href="../index.html">Main page</a>
-    <h1>Weather Forecast</h1>    
 
-    <hr>
+    <div class="weather-container">
+        <div class="header">
+            <h1>Prognoza pogody</h1>
+        </div>
+        <progress id="progress" max="100" value="0"></progress>
+        <div class="add-city">
+            <div class="input-container">
+                <label for="name">Dodaj miasto:</label>
+                <input type="text" name="input_city">
+                <button class="button button3" id="button_add_city" >Dodaj</button>                
+            </div>
+        </div>
+    </div>
+    <div class="table-container">
+            <div class="table">
+                <div class="table-row">
+                    <div>#</div>
+                    <div>Miasto</div>
+                    <div>Srednia temperatura</div>
+                    <div class="remove_white">zamiasutaa</div>
+                </div>
+                <div class="table-row">
+                    <div>1</div>
+                    <div>Miasto</div>
+                    <div>Srednia temperatura</div>
+                    <button class="button button3">Usuń</button>
+                </div>                                
+            </div>
+         </div>
 
-    <h3>Add new city:</h3>
-    <input type="text" name="input_city"><br>
-    <button id="button_add_city">Add City</button>
+
+
+    <!-- <h3>Add new city:</h3> -->
+    <!-- <input type="text" name="input_city"><br> -->
+    <!-- <button id="button_add_city">Add City</button> -->
     <button id="button_check_weather">Check weather</button>
-    <button id="button_show_map">Show map</button>
-    <progress id="progress" max="100" value="0"></progress>
+    <!-- <button id="button_show_map">Show map</button> -->
+    <!-- <progress id="progress" max="100" value="0"></progress> -->
 
-    <div id="list">      
+
+
+
+
+    <!-- <div id="list">      
         <div class="item">
             <div class="task">1 sdfsdf sdf sdtask </div><div class="remove">remove</div>
         </div>       
-    </div>   
+    </div>    -->
 
-    <!-- <script src="weather_forecast.js" type="module"></script> -->
+    <script src="weather_forecast.js" type="module"></script>
 </body>
 </html>
