@@ -1,0 +1,59 @@
+Zadanie:
+
+Napisać program konsolowy w języku Javascript, wykorzystujący przynajmniej:
+
+ 
+Funkcje
+Kilka typów zmiennych
+Module/Revealing Module (program ma umieścić tylko jedną zmienną w przestrzeni globalnej)
+Konstruktor i prototyp
+This
+
+ 
+Jaki program?
+
+Zalecana inwencja własna, w razie braku pomysłów np.:
+
+ 
+kalkulator (arytmetyczny),
+kalkulator przekształcający jednostki (mile na kilometry itp),
+kalkulator wyliczający resztę z danej kwoty z podziałem na nominały,
+program wyliczający liczbę poszczególnych liter w podanym tekście ...
+
+ 
+Porady:
+Jak napisać program "konsolowy"?
+
+<html>
+
+<head>
+
+<script>
+
+ 
+
+...tutaj twój kod...
+
+ 
+
+</script>
+
+</head>
+
+<body></body>
+
+</html>
+
+ 
+
+Zapisać plik html, otworzyć w przeglądarce, otworzyć konsolę (F12->console), możę być konieczne odświeżenie (F5), aby zobaczyć wyjście programu.
+
+
+Jak interaktywnie pobrać dane od użytkownika?
+
+Np. var response = prompt("question");
+
+
+Jak wypisujemy na konsolę?
+
+console.log("output") // nie trzeba przejmować się typem danych

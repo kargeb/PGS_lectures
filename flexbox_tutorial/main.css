@@ -130,3 +130,11 @@ body {
 .call-out:nth-child(1) {background-color: #c0dbe2;}
 .call-out:nth-child(2) {background-color: #cdf1c3;}
 .call-out:nth-child(3) {background-color: #ccb9da;}
+
+.pgs-weather-container {
+    height: 400px;
+    width: 700px;
+    margin: 40px auto 40px auto;
+    background-color: #2a2a2a;
+    display: flex;
+}
