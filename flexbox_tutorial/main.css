@@ -130,7 +130,6 @@ body {
 .call-out:nth-child(1) {background-color: #c0dbe2;}
 .call-out:nth-child(2) {background-color: #cdf1c3;}
 .call-out:nth-child(3) {background-color: #ccb9da;}
-<<<<<<< HEAD
 
 .pgs-weather-container {
     height: 400px;
@@ -139,5 +138,3 @@ body {
     background-color: #2a2a2a;
     display: flex;
 }
-=======
->>>>>>> b36727c3d5d6b2a1878aaa7c9da0409f7f55eb83
