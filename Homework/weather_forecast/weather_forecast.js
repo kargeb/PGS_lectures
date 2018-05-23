@@ -14,12 +14,12 @@ import { average_temp } from "../modules/calculations.js";
     var button_add_city = document.querySelector("#button_add_city");
     var progress = document.querySelector("#progress");
     var map_city = new Map();
-
     var table = document.querySelector(".table");
 
 
     document.addEventListener("DOMContentLoaded", function(){
 
+        
         progress.classList.add("hide");
         map_city = load_from_storage(WEATHER_LS_VALUE);
         map_city = capitalizeFirstLetter(map_city);
@@ -55,12 +55,14 @@ import { average_temp } from "../modules/calculations.js";
 
     function show_list_from_map() {
         clear_list();
+        let id = 0;
         for(let [key, value] of map_city.entries()) {
-            fill_list(key, value);
+            id++;
+            fill_list(key, value, id);
         }
     }
 
-    function fill_list(city, temp) {
+    function fill_list(city, temp, id) {
         let div_city = document.createElement("div");
         let div_temp = document.createElement("div");
         let div_id = document.createElement("div");
@@ -69,10 +71,12 @@ import { average_temp } from "../modules/calculations.js";
         div_table_row.classList.add("table-row");
         button_remove.classList.add("button", "button3");
 
-        div_id.innerHTML = "1";
+        div_id.innerHTML = id;
         div_city.innerHTML = city;
         div_temp.innerHTML = temp;
         button_remove.innerHTML = "Usuń";     
+
+        div_id.classList.add("id");
    
         if(temp) {
             div_temp.innerHTML = temp + " &#8451;";
@@ -128,8 +132,9 @@ import { average_temp } from "../modules/calculations.js";
     // }
 
     function clear_list() {
-        while(table.firstElementChild){
-            table.removeChild(table.firstElementChild);
+        while(table.firstElementChild.nextElementSibling){
+
+            table.removeChild(table.firstElementChild.nextElementSibling);
         }
     }
 
@@ -152,6 +157,7 @@ import { average_temp } from "../modules/calculations.js";
             // let city_to_remove = (target.previousSibling.innerHTML).split(" ");
             console.log(target);
             console.log(target.previousElementSibling);
+            console.log(target.previousElementSibling.previousElementSibling.innerHTML)
             let city_to_remove = ( target.previousElementSibling.previousElementSibling.innerHTML);
             city_to_remove = city_to_remove.toLowerCase();
             remove_one_item_from_storage(city_to_remove);
@@ -218,14 +224,19 @@ import { average_temp } from "../modules/calculations.js";
                                 data = JSON.parse(xmlhttp.responseText);
                                 // temp = Math.trunc(average_temp(data));
                                 // map_city.set(key,temp);
-    
-                                resolve(data);
+
+                                resolve(data); 
+
+                                ;
                             } else {
                                 reject("Nie ma takiego miasta w bazie!");
                             } 
                         }
-                
-                        xmlhttp.send();        
+
+                        // setTimeout(function(){ 
+                        // }, 3000);
+                        
+                        xmlhttp.send();
 
                 });
     

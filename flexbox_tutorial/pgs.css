@@ -58,6 +58,28 @@ body {
     justify-content: space-around;
 }
 
+
+
+.table-row div{
+    color: #4CAF50;
+    text-align: center;
+    flex: 1;
+}
+
+.table-row button{
+    color: #4CAF50;
+    flex: 1;
+    /* text-align: center; */
+}
+
+
+
+
+/* .table-row div:last-child{
+    flex:1;
+} */
+
+
 .table-row:first-child { 
     font-weight: bold;
     font-size: 18px; 
@@ -66,22 +88,30 @@ body {
     padding-bottom: 12px;
 }
 
+#last-header {
+    background-color: black;
+    border: 2px solid #f44336;
+    flex: 1;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 .remove_white {
     color: #FFF
 }
 
 .button {
-    background-color: #4CAF50; /* Green */
+    /* background-color: #4CAF50; Green */
     border: none;
     color: white;
     /* padding: 16px 32px; */
-    padding: 5px;
-    width: 80px;
+    /* padding: 5px; */
+    /* width: 80px; */
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin-left: 15px;
+    /* margin-left: 15px; */
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
     cursor: pointer;
