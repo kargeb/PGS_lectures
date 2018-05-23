@@ -48,7 +48,8 @@ body {
 
 .weather-container {
     width: 90%;
-    margin: 40px auto;
+    margin: 0 auto;
+    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
     /* border: solid 2px black; */
@@ -58,6 +59,7 @@ body {
     color: #ff7726;
     font-size: 24px;
     margin: auto;
+    margin-bottom: 20px;
 }
 
 .add-city {
@@ -202,6 +204,14 @@ progress[value]::-webkit-progress-bar {
     color: #F57C00;
 }
 
+#button_check_weather {
+    background-color: #F57C00; 
+    color: white; 
+    border: 2px solid rgb(214, 109, 3);
+    margin-left: 15px;
+    width: 80px;
+}
+
 #usless {
     color: white;
     background-color: white; 
@@ -210,4 +220,12 @@ progress[value]::-webkit-progress-bar {
     cursor: unset;
     /* flex: 1; */
     width: 80px;
+}
+
+.unactive, .unactive:hover {
+    background-color: darkgray !important;
+    border: 2px solid darkgray !important;
+    cursor: unset !important;
+    color: white !important;
+
 }

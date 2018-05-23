@@ -15,6 +15,8 @@ import { average_temp } from "../modules/calculations.js";
     var progress = document.querySelector("#progress");
     var map_city = new Map();
     var table = document.querySelector(".table");
+    var buttons = document.querySelectorAll(".button");
+    
 
 
     document.addEventListener("DOMContentLoaded", function(){
@@ -26,19 +28,39 @@ import { average_temp } from "../modules/calculations.js";
         console.log(map_city);
         show_list_from_map();
         check_weather();
+        // console.log(buttons);
 
     });
 
     function buttons_off() {
-        button_check_weather.disabled = true;
+
+        // button_check_weather.disabled = true;
         // button_show_map.disabled = true;
-        button_add_city.disabled = true;
+        console.log(buttons);
+
+        for(let but of buttons) {
+            but.classList.add("unactive");
+            but.disabled = true;
+        }
+
+        // buttons.classList.add("unactive");
+        // buttons.disabled = true;
+        // button_add_city.classList.add("unactive");
+        // button_add_city.disabled = true;
     }
 
     function buttons_on() {
-        button_check_weather.disabled = false;
+        // button_check_weather.disabled = false;
         // button_show_map.disabled = false;
-        button_add_city.disabled = false;
+
+        for(let but of buttons) {
+            but.classList.remove("unactive");
+            but.disabled = false;
+        }
+
+
+        // button_add_city.classList.remove("unactive");
+        // button_add_city.disabled = false;
     }
 
 
@@ -60,6 +82,10 @@ import { average_temp } from "../modules/calculations.js";
             id++;
             fill_list(key, value, id);
         }
+
+        buttons = document.querySelectorAll(".button");
+        console.log(buttons);
+
     }
 
     function fill_list(city, temp, id) {
@@ -196,6 +222,7 @@ import { average_temp } from "../modules/calculations.js";
         function check_weather() {
             let temp;
             let city_name;
+
     
             progress.classList.remove("hide");
             // progress.classList.add("show");
@@ -276,7 +303,7 @@ import { average_temp } from "../modules/calculations.js";
     // }
 
     button_add_city.addEventListener("click", add_city);
-    button_check_weather.addEventListener("click", check_weather);
+    // button_check_weather.addEventListener("click", check_weather);
     // button_show_map.addEventListener("click", show_map);
     // button_show_map.addEventListener("click", function(){
     //     rob_wiersz("albigowa", 30);
