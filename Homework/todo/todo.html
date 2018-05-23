@@ -10,29 +10,52 @@
 </head>
 <body>
     <a href="../index.html">Main page</a>
-    <h1>ToDo list</h1>
-    Mozna dodac jeszcze date jako wartosc klucza i sortowac po niej liste
-    <hr><br>
-
-    <button id="button_clear_list">Clear list</button>
-    <button id="button_show_list">Show list</button>
-    <button id="button_clear_storage">Clear all</button>
     
-
-    <br><br>
-
-    <form>
-        New task: <input type="text" name="new"><br>
-        <input type="submit" value="Dodaj">
-    </form>
-
-    <div id="list">      
-        <!-- <div id="list">      
-                <div class="item">
-                <div class="task">1 sdfsdf sdf sdtask </div><div class="remove">remove</div>
-            </div>       
-        </div> -->        
+    <div class="todo-container">
+        <div class="header">
+            <h1>To Do</h1>
+        </div>
+        
+        <div class="add-city">
+            <div class="input-container">
+                <label for="name">Nowe zadanie:</label>
+                <input type="text" name="input_task">
+                <button class="button" id="button_add_task" >Dodaj</button> 
+                <!-- <button class="button" id="button_clear_storage">asdasdasdasdasd</button> -->
+            </div>
+        </div>
     </div>
+    <div class="todo-table-container">
+        <div class="todo-table">
+            <div class="todo-table-row">
+                <div>Jakies zadanie</div>
+                <button class="button button3">Usuń</button>
+            </div>                                
+        </div>
+     </div>    
 
 </body>
 </html>
+
+    <!-- <h1>ToDo list</h1> -->
+    <!-- Mozna dodac jeszcze date jako wartosc klucza i sortowac po niej liste -->
+    <!-- <hr><br> -->
+
+    <!-- <button id="button_clear_list">Clear list</button>
+    <button id="button_show_list">Show list</button>
+    <button id="button_clear_storage">Clear all</button> -->
+    
+
+    <!-- <form>
+        New task: <input type="text" name="new"><br>
+        <input type="submit" value="Dodaj">
+    </form> -->
+
+    <!-- <div id="list">       -->
+        <!-- <div id="list">      
+            <div class="item">
+                <div class="task">1 sdfsdf sdf sdtask </div><div class="remove">remove</div>
+            </div>       
+        </div> -->        
+    <!-- </div> -->
+
