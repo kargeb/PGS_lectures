@@ -1,0 +1,105 @@
+/* h2 {margin: 0;} */
+
+
+body {
+    background-color: #F57C00;
+    font-family: Roboto;
+    color: white;
+}
+
+.container {
+    /* height: 85vh; */
+    height: 500px;
+    width: 80%;
+    margin: 40px auto 40px auto;
+    display: flex;
+    flex-direction: column;
+
+
+}
+
+.main-site {
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    color: black;
+    flex-basis: 40%;
+}
+
+.down {
+    /* flex-basis: 50%; */
+    background-color: #F57C00;
+    display: flex;
+    flex-basis: 60%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.logo {
+   
+    width: 100%;
+    /* margin: 0; */
+    /* background-image: url('pgssoftware-logo.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: green; */
+    flex: 1;
+    /* flex-basis: 30%; */
+}
+
+.left {
+    background-color: white;
+    flex: 1;
+}
+
+.right {
+    background-color: white;
+    flex: 1;
+}
+
+
+.header {
+    background-color: white;
+    flex-basis: 25%;
+    text-align: center;
+    color: #F57C00;
+    font-size: 20px;
+    font-weight: bold;
+    /* flex: 1; */
+
+}
+
+.nav {
+    /* background-color: cadetblue; */
+    /* flex:2; */
+    /* box-sizing: border-box; */
+    /* flex: 1; */
+    flex-basis: 60%;
+    display: flex;
+    justify-content: space-between;
+    /* background-: white; */
+}
+
+.one, .two, .three {
+    flex-basis: 30%;
+    background-color: white;
+    cursor: pointer;
+    /* background-color: white; */
+}
+
+
+.three img, .two img, .one img {
+    display: block;
+    /* margin: 0 auto; */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    margin: auto;
+    margin-top: 30px; 
+    /* margin-top: 5%; */
+    width: 40%;
+}
+
+.one:hover, .two:hover, .three:hover {
+    /* background-color: black; */
+    border: solid black 10px;
+}
