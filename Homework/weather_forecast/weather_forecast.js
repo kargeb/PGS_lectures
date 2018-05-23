@@ -27,7 +27,10 @@ import { average_temp } from "../modules/calculations.js";
         map_city = capitalizeFirstLetter(map_city);
         console.log(map_city);
         show_list_from_map();
-        check_weather();
+        if(map_city.size) {
+            check_weather();
+        }
+        
         // console.log(buttons);
 
     });

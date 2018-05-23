@@ -51,17 +51,23 @@ class Letters {
 
 console.log("dziala");
 
+setTimeout(function(){ 
+    var text = prompt("Podaj tekst: ");
+    console.log( text.length );
 
-var text = prompt("Podaj tekst: ")
-
-console.log( text.length );
-
-console.log(text.charCodeAt(2));
+// console.log(text.charCodeAt(2));
 
 var letter_obj = new Letters(text);
 
-console.log( "Podałeś: " + letter_obj.show_text() );
-letter_obj.compute_letters();
+// console.log( "Podałeś: " + letter_obj.show_text() );
+letter_obj.compute_letters(); 
+    
+}, 1000);
+
+
+
+
+
 
 
 
